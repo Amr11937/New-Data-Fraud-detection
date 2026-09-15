@@ -1,0 +1,1352 @@
+[
+  {
+    "offer_name":"FTTH_WEB FAMILY PLUS",
+    "global_offer_session_count":14624869,
+    "offer_frequency_encoding":0.2470908947
+  },
+  {
+    "offer_name":"FTTH_UNLIMITED HOME",
+    "global_offer_session_count":6085359,
+    "offer_frequency_encoding":0.1028136936
+  },
+  {
+    "offer_name":"P_BD_A_LOYALTYR",
+    "global_offer_session_count":3636364,
+    "offer_frequency_encoding":0.0614372979
+  },
+  {
+    "offer_name":"FTTH_ANY FLIX",
+    "global_offer_session_count":2938636,
+    "offer_frequency_encoding":0.0496490053
+  },
+  {
+    "offer_name":"FTTH_FIBER STARTER",
+    "global_offer_session_count":2057562,
+    "offer_frequency_encoding":0.0347630352
+  },
+  {
+    "offer_name":"P_VB_Q_YOUTH_Re7D",
+    "global_offer_session_count":1814974,
+    "offer_frequency_encoding":0.030664449
+  },
+  {
+    "offer_name":"FTTH_ANY TIDE",
+    "global_offer_session_count":1429240,
+    "offer_frequency_encoding":0.0241473746
+  },
+  {
+    "offer_name":"P_VB_Q_YT_Re7D_15GB",
+    "global_offer_session_count":1428841,
+    "offer_frequency_encoding":0.0241406334
+  },
+  {
+    "offer_name":"ADDON 10",
+    "global_offer_session_count":1335609,
+    "offer_frequency_encoding":0.022565455
+  },
+  {
+    "offer_name":"P_VB_U_Meet",
+    "global_offer_session_count":1205232,
+    "offer_frequency_encoding":0.0203627023
+  },
+  {
+    "offer_name":"FTTH_UNLIMITED FAMILY",
+    "global_offer_session_count":1066446,
+    "offer_frequency_encoding":0.0180178774
+  },
+  {
+    "offer_name":"P_VB_U_Netflix",
+    "global_offer_session_count":1008143,
+    "offer_frequency_encoding":0.0170328333
+  },
+  {
+    "offer_name":"FTTH_WEB FAMILY XTRA",
+    "global_offer_session_count":955665,
+    "offer_frequency_encoding":0.0161462041
+  },
+  {
+    "offer_name":"P_VB_Q_OM_OT_30GB",
+    "global_offer_session_count":921087,
+    "offer_frequency_encoding":0.015562
+  },
+  {
+    "offer_name":"P_VB_Q_OM_OT_100GB",
+    "global_offer_session_count":852880,
+    "offer_frequency_encoding":0.0144096253
+  },
+  {
+    "offer_name":"FTTH_WEB FAMILY ACTIVE",
+    "global_offer_session_count":832090,
+    "offer_frequency_encoding":0.0140583729
+  },
+  {
+    "offer_name":"VOD_10GB",
+    "global_offer_session_count":659210,
+    "offer_frequency_encoding":0.0111375212
+  },
+  {
+    "offer_name":"VOD_20GB",
+    "global_offer_session_count":638993,
+    "offer_frequency_encoding":0.0107959498
+  },
+  {
+    "offer_name":"VOD_5GB",
+    "global_offer_session_count":627586,
+    "offer_frequency_encoding":0.0106032257
+  },
+  {
+    "offer_name":"FTTH_UNLIMITED HOME PLUS",
+    "global_offer_session_count":610028,
+    "offer_frequency_encoding":0.0103065788
+  },
+  {
+    "offer_name":"P_VB_Q_UPLOAD_40GB",
+    "global_offer_session_count":579193,
+    "offer_frequency_encoding":0.0097856136
+  },
+  {
+    "offer_name":"FTTH_WEB PAL",
+    "global_offer_session_count":565404,
+    "offer_frequency_encoding":0.0095526449
+  },
+  {
+    "offer_name":"4G_LTE HBB Anytime 50GB",
+    "global_offer_session_count":489580,
+    "offer_frequency_encoding":0.0082715791
+  },
+  {
+    "offer_name":"WEB LITE",
+    "global_offer_session_count":470525,
+    "offer_frequency_encoding":0.00794964
+  },
+  {
+    "offer_name":"FTTH_UNLIMITED BOOST",
+    "global_offer_session_count":466369,
+    "offer_frequency_encoding":0.0078794233
+  },
+  {
+    "offer_name":"FTTH_ANY TRIO VIBE",
+    "global_offer_session_count":458372,
+    "offer_frequency_encoding":0.0077443119
+  },
+  {
+    "offer_name":"VOD_25GB",
+    "global_offer_session_count":454949,
+    "offer_frequency_encoding":0.0076864795
+  },
+  {
+    "offer_name":"P_VB_U_UPLOAD",
+    "global_offer_session_count":440667,
+    "offer_frequency_encoding":0.0074451814
+  },
+  {
+    "offer_name":"FTTH_ANY BLAZE",
+    "global_offer_session_count":431218,
+    "offer_frequency_encoding":0.0072855382
+  },
+  {
+    "offer_name":"LTE_WEB STARTER",
+    "global_offer_session_count":409607,
+    "offer_frequency_encoding":0.0069204148
+  },
+  {
+    "offer_name":"FTTH_ANY TRIO SHINE",
+    "global_offer_session_count":389686,
+    "offer_frequency_encoding":0.0065838444
+  },
+  {
+    "offer_name":"FTTH_WEB PRO",
+    "global_offer_session_count":384300,
+    "offer_frequency_encoding":0.0064928466
+  },
+  {
+    "offer_name":"WEB FAMILY PLUS",
+    "global_offer_session_count":383020,
+    "offer_frequency_encoding":0.0064712207
+  },
+  {
+    "offer_name":"CPE_MGMT_1212",
+    "global_offer_session_count":382421,
+    "offer_frequency_encoding":0.0064611004
+  },
+  {
+    "offer_name":"P_VB_Q_OM_Re30D_30GB",
+    "global_offer_session_count":343601,
+    "offer_frequency_encoding":0.0058052266
+  },
+  {
+    "offer_name":"LTE_WEB FAMILY PLUS",
+    "global_offer_session_count":336106,
+    "offer_frequency_encoding":0.0056785967
+  },
+  {
+    "offer_name":"ADDON 25",
+    "global_offer_session_count":311446,
+    "offer_frequency_encoding":0.0052619597
+  },
+  {
+    "offer_name":"FTTH_ANY STORM",
+    "global_offer_session_count":303368,
+    "offer_frequency_encoding":0.0051254798
+  },
+  {
+    "offer_name":"FTTH_WEB BOOSTER",
+    "global_offer_session_count":275207,
+    "offer_frequency_encoding":0.0046496925
+  },
+  {
+    "offer_name":"P_VB_Q_MZ_Re7D_10GB",
+    "global_offer_session_count":271143,
+    "offer_frequency_encoding":0.0045810302
+  },
+  {
+    "offer_name":"VOD_1GB",
+    "global_offer_session_count":236941,
+    "offer_frequency_encoding":0.0040031787
+  },
+  {
+    "offer_name":"FTTH_UNLIMITED 10",
+    "global_offer_session_count":230839,
+    "offer_frequency_encoding":0.0039000838
+  },
+  {
+    "offer_name":"4G_LTE HBB Anytime 85GB",
+    "global_offer_session_count":217068,
+    "offer_frequency_encoding":0.0036674193
+  },
+  {
+    "offer_name":"WEB STARTER",
+    "global_offer_session_count":206319,
+    "offer_frequency_encoding":0.0034858122
+  },
+  {
+    "offer_name":"LTE_WEB PAL",
+    "global_offer_session_count":194140,
+    "offer_frequency_encoding":0.0032800449
+  },
+  {
+    "offer_name":"4G_VOICE PAL BASIC",
+    "global_offer_session_count":193097,
+    "offer_frequency_encoding":0.0032624231
+  },
+  {
+    "offer_name":"P_VB_Q_UPLOAD_12GB",
+    "global_offer_session_count":182657,
+    "offer_frequency_encoding":0.0030860366
+  },
+  {
+    "offer_name":"FTTH_ANY TRIO PET",
+    "global_offer_session_count":177750,
+    "offer_frequency_encoding":0.0030031316
+  },
+  {
+    "offer_name":"FTTH_ANY SPIKE",
+    "global_offer_session_count":177711,
+    "offer_frequency_encoding":0.0030024727
+  },
+  {
+    "offer_name":"FTTH_UNLIMITED TWIN",
+    "global_offer_session_count":177457,
+    "offer_frequency_encoding":0.0029981813
+  },
+  {
+    "offer_name":"WEB PAL",
+    "global_offer_session_count":171920,
+    "offer_frequency_encoding":0.0029046323
+  },
+  {
+    "offer_name":"FTTH_UNLIMITED PRO",
+    "global_offer_session_count":166945,
+    "offer_frequency_encoding":0.0028205784
+  },
+  {
+    "offer_name":"VOD_2GB",
+    "global_offer_session_count":160859,
+    "offer_frequency_encoding":0.0027177539
+  },
+  {
+    "offer_name":"P_VB_Q_OM_Re30D_100GB",
+    "global_offer_session_count":157578,
+    "offer_frequency_encoding":0.0026623205
+  },
+  {
+    "offer_name":"ANY BEAT",
+    "global_offer_session_count":156376,
+    "offer_frequency_encoding":0.0026420124
+  },
+  {
+    "offer_name":"ADDON 5",
+    "global_offer_session_count":155141,
+    "offer_frequency_encoding":0.0026211468
+  },
+  {
+    "offer_name":"LTE_ANY JOY",
+    "global_offer_session_count":143419,
+    "offer_frequency_encoding":0.0024231006
+  },
+  {
+    "offer_name":"VOD_50GB",
+    "global_offer_session_count":137856,
+    "offer_frequency_encoding":0.0023291123
+  },
+  {
+    "offer_name":"VOD_15GB",
+    "global_offer_session_count":135775,
+    "offer_frequency_encoding":0.0022939533
+  },
+  {
+    "offer_name":"FTTH_WEB MASTER",
+    "global_offer_session_count":132310,
+    "offer_frequency_encoding":0.0022354112
+  },
+  {
+    "offer_name":"ANY JOY",
+    "global_offer_session_count":117788,
+    "offer_frequency_encoding":0.0019900583
+  },
+  {
+    "offer_name":"4G_LTE HBB Anytime 115GB",
+    "global_offer_session_count":105698,
+    "offer_frequency_encoding":0.0017857947
+  },
+  {
+    "offer_name":"FTTH_UNLIMITED TURBO",
+    "global_offer_session_count":105217,
+    "offer_frequency_encoding":0.0017776681
+  },
+  {
+    "offer_name":"P_VB_Q_GAME_Re30D_25GB",
+    "global_offer_session_count":91028,
+    "offer_frequency_encoding":0.0015379413
+  },
+  {
+    "offer_name":"FTTH_ANY GLAM",
+    "global_offer_session_count":88732,
+    "offer_frequency_encoding":0.0014991498
+  },
+  {
+    "offer_name":"ANY FLIX",
+    "global_offer_session_count":85838,
+    "offer_frequency_encoding":0.0014502549
+  },
+  {
+    "offer_name":"VOD_3GB",
+    "global_offer_session_count":85495,
+    "offer_frequency_encoding":0.0014444598
+  },
+  {
+    "offer_name":"LTE_ANY BEAT",
+    "global_offer_session_count":82175,
+    "offer_frequency_encoding":0.0013883676
+  },
+  {
+    "offer_name":"4G_LTE HBB Anytime 200GB",
+    "global_offer_session_count":81718,
+    "offer_frequency_encoding":0.0013806465
+  },
+  {
+    "offer_name":"LTE_WEB LITE",
+    "global_offer_session_count":74232,
+    "offer_frequency_encoding":0.0012541686
+  },
+  {
+    "offer_name":"FTTH_UNLIMITED 25",
+    "global_offer_session_count":66051,
+    "offer_frequency_encoding":0.0011159485
+  },
+  {
+    "offer_name":"VOD_100GB",
+    "global_offer_session_count":64702,
+    "offer_frequency_encoding":0.0010931568
+  },
+  {
+    "offer_name":"FTTH_WEB CHAMP",
+    "global_offer_session_count":62994,
+    "offer_frequency_encoding":0.0010642997
+  },
+  {
+    "offer_name":"LTE_ANY FLIX",
+    "global_offer_session_count":52854,
+    "offer_frequency_encoding":0.0008929818
+  },
+  {
+    "offer_name":"FTTH_ANY XTREME",
+    "global_offer_session_count":51018,
+    "offer_frequency_encoding":0.0008619621
+  },
+  {
+    "offer_name":"VOD_8GB",
+    "global_offer_session_count":49486,
+    "offer_frequency_encoding":0.0008360786
+  },
+  {
+    "offer_name":"ANY TIDE",
+    "global_offer_session_count":49412,
+    "offer_frequency_encoding":0.0008348284
+  },
+  {
+    "offer_name":"LTE_WEB FAMILY XTRA",
+    "global_offer_session_count":46116,
+    "offer_frequency_encoding":0.0007791416
+  },
+  {
+    "offer_name":"FTTH_ANY DELIGHT",
+    "global_offer_session_count":43648,
+    "offer_frequency_encoding":0.0007374441
+  },
+  {
+    "offer_name":"FTTH_UNLIMITED 50",
+    "global_offer_session_count":41479,
+    "offer_frequency_encoding":0.0007007983
+  },
+  {
+    "offer_name":"FTTH_WEB LIFE",
+    "global_offer_session_count":41124,
+    "offer_frequency_encoding":0.0006948005
+  },
+  {
+    "offer_name":"LTE_WEB FAMILY ACTIVE",
+    "global_offer_session_count":41120,
+    "offer_frequency_encoding":0.0006947329
+  },
+  {
+    "offer_name":"FTTH_UNLIMITED FLASH 10",
+    "global_offer_session_count":39892,
+    "offer_frequency_encoding":0.0006739855
+  },
+  {
+    "offer_name":"VOD_6GB",
+    "global_offer_session_count":39495,
+    "offer_frequency_encoding":0.0006672781
+  },
+  {
+    "offer_name":"STUDENT PACKAGE 1",
+    "global_offer_session_count":39419,
+    "offer_frequency_encoding":0.0006659941
+  },
+  {
+    "offer_name":"LTE_UNLIMITED 2",
+    "global_offer_session_count":36580,
+    "offer_frequency_encoding":0.0006180284
+  },
+  {
+    "offer_name":"WEB FAMILY XTRA",
+    "global_offer_session_count":35025,
+    "offer_frequency_encoding":0.0005917563
+  },
+  {
+    "offer_name":"FTTH_UNLIMITED BLAST",
+    "global_offer_session_count":34959,
+    "offer_frequency_encoding":0.0005906412
+  },
+  {
+    "offer_name":"INTERNET FREEDOM",
+    "global_offer_session_count":34025,
+    "offer_frequency_encoding":0.0005748611
+  },
+  {
+    "offer_name":"Z_Happy_Day",
+    "global_offer_session_count":32349,
+    "offer_frequency_encoding":0.0005465446
+  },
+  {
+    "offer_name":"FTTH_WEB INSPIRE",
+    "global_offer_session_count":30158,
+    "offer_frequency_encoding":0.0005095271
+  },
+  {
+    "offer_name":"P_BD_A_BONUS1",
+    "global_offer_session_count":29842,
+    "offer_frequency_encoding":0.0005041882
+  },
+  {
+    "offer_name":"WEB FAMILY ACTIVE",
+    "global_offer_session_count":29032,
+    "offer_frequency_encoding":0.0004905031
+  },
+  {
+    "offer_name":"FTTH_SCHOOLBB PACKAGE 1",
+    "global_offer_session_count":28317,
+    "offer_frequency_encoding":0.0004784229
+  },
+  {
+    "offer_name":"P_VB_Q_ENTEXP_RE_25GB",
+    "global_offer_session_count":24899,
+    "offer_frequency_encoding":0.000420675
+  },
+  {
+    "offer_name":"LTE_ANY BLAZE",
+    "global_offer_session_count":24401,
+    "offer_frequency_encoding":0.0004122611
+  },
+  {
+    "offer_name":"Unlimited_Day_Pass",
+    "global_offer_session_count":23893,
+    "offer_frequency_encoding":0.0004036783
+  },
+  {
+    "offer_name":"Ent_5 TB Package",
+    "global_offer_session_count":23588,
+    "offer_frequency_encoding":0.0003985253
+  },
+  {
+    "offer_name":"LTE_UNLIMITED FLASH 5",
+    "global_offer_session_count":23339,
+    "offer_frequency_encoding":0.0003943184
+  },
+  {
+    "offer_name":"P_VB_Q_YOUTH_RE_25GB",
+    "global_offer_session_count":21699,
+    "offer_frequency_encoding":0.0003666101
+  },
+  {
+    "offer_name":"VOD_30GB",
+    "global_offer_session_count":21694,
+    "offer_frequency_encoding":0.0003665257
+  },
+  {
+    "offer_name":"FTTH_SCHOOLBB UNLIMITED1",
+    "global_offer_session_count":21306,
+    "offer_frequency_encoding":0.0003599703
+  },
+  {
+    "offer_name":"VOD_7GB",
+    "global_offer_session_count":20748,
+    "offer_frequency_encoding":0.0003505428
+  },
+  {
+    "offer_name":"STUDENT PACKAGE 2",
+    "global_offer_session_count":20032,
+    "offer_frequency_encoding":0.0003384458
+  },
+  {
+    "offer_name":"FTTH_WEB PREMIER",
+    "global_offer_session_count":19662,
+    "offer_frequency_encoding":0.0003321945
+  },
+  {
+    "offer_name":"WEB PRO",
+    "global_offer_session_count":19371,
+    "offer_frequency_encoding":0.000327278
+  },
+  {
+    "offer_name":"LTE_ANY TIDE",
+    "global_offer_session_count":19044,
+    "offer_frequency_encoding":0.0003217532
+  },
+  {
+    "offer_name":"LTE_UNLIMITED 4",
+    "global_offer_session_count":18396,
+    "offer_frequency_encoding":0.0003108051
+  },
+  {
+    "offer_name":"4G_BIZ PAL",
+    "global_offer_session_count":17762,
+    "offer_frequency_encoding":0.0003000935
+  },
+  {
+    "offer_name":"ANY BLAZE",
+    "global_offer_session_count":17663,
+    "offer_frequency_encoding":0.0002984209
+  },
+  {
+    "offer_name":"LTE_PREPAID",
+    "global_offer_session_count":17470,
+    "offer_frequency_encoding":0.0002951601
+  },
+  {
+    "offer_name":"ENTREE",
+    "global_offer_session_count":17417,
+    "offer_frequency_encoding":0.0002942647
+  },
+  {
+    "offer_name":"Ent_10 TB Package",
+    "global_offer_session_count":16887,
+    "offer_frequency_encoding":0.0002853102
+  },
+  {
+    "offer_name":"LTE_UNLIMITED 8",
+    "global_offer_session_count":16469,
+    "offer_frequency_encoding":0.000278248
+  },
+  {
+    "offer_name":"HOME",
+    "global_offer_session_count":15436,
+    "offer_frequency_encoding":0.0002607952
+  },
+  {
+    "offer_name":"DATAONE_REDEFINE",
+    "global_offer_session_count":14996,
+    "offer_frequency_encoding":0.0002533612
+  },
+  {
+    "offer_name":"FTTH_UNLIMITED EDGE",
+    "global_offer_session_count":14769,
+    "offer_frequency_encoding":0.000249526
+  },
+  {
+    "offer_name":"4G_LTE HBB Anytime 400GB",
+    "global_offer_session_count":14565,
+    "offer_frequency_encoding":0.0002460794
+  },
+  {
+    "offer_name":"UNLIMITED 2",
+    "global_offer_session_count":12890,
+    "offer_frequency_encoding":0.0002177798
+  },
+  {
+    "offer_name":"VOD_35GB",
+    "global_offer_session_count":12748,
+    "offer_frequency_encoding":0.0002153807
+  },
+  {
+    "offer_name":"LTE_WEB PRO",
+    "global_offer_session_count":12527,
+    "offer_frequency_encoding":0.0002116469
+  },
+  {
+    "offer_name":"P_VB_Q_PR_YOUTH_RE_10GB",
+    "global_offer_session_count":12419,
+    "offer_frequency_encoding":0.0002098222
+  },
+  {
+    "offer_name":"FTTH_ANY TRIO VIBE PLUS",
+    "global_offer_session_count":12194,
+    "offer_frequency_encoding":0.0002060207
+  },
+  {
+    "offer_name":"VOD_9GB",
+    "global_offer_session_count":12100,
+    "offer_frequency_encoding":0.0002044326
+  },
+  {
+    "offer_name":"VOD_75GB",
+    "global_offer_session_count":11184,
+    "offer_frequency_encoding":0.0001889565
+  },
+  {
+    "offer_name":"P_VB_Q_RE_BONUS_1",
+    "global_offer_session_count":10673,
+    "offer_frequency_encoding":0.0001803231
+  },
+  {
+    "offer_name":"LTE_WEB BOOSTER",
+    "global_offer_session_count":9118,
+    "offer_frequency_encoding":0.0001540509
+  },
+  {
+    "offer_name":"P_VB_U_PROYT_24HR",
+    "global_offer_session_count":8700,
+    "offer_frequency_encoding":0.0001469887
+  },
+  {
+    "offer_name":"FTTH_ULTRA SURFER",
+    "global_offer_session_count":8590,
+    "offer_frequency_encoding":0.0001451302
+  },
+  {
+    "offer_name":"Ent_35 TB Package",
+    "global_offer_session_count":8313,
+    "offer_frequency_encoding":0.0001404503
+  },
+  {
+    "offer_name":"FTTH_ULTRA PRIME",
+    "global_offer_session_count":8300,
+    "offer_frequency_encoding":0.0001402306
+  },
+  {
+    "offer_name":"DATAONE_EXPLORE",
+    "global_offer_session_count":8278,
+    "offer_frequency_encoding":0.0001398589
+  },
+  {
+    "offer_name":"P_VB_Q_GAME_Re30D_100GB",
+    "global_offer_session_count":8222,
+    "offer_frequency_encoding":0.0001389128
+  },
+  {
+    "offer_name":"Ent_14 TB Package",
+    "global_offer_session_count":8056,
+    "offer_frequency_encoding":0.0001361082
+  },
+  {
+    "offer_name":"WEB MASTER",
+    "global_offer_session_count":7663,
+    "offer_frequency_encoding":0.0001294683
+  },
+  {
+    "offer_name":"DATAONE_ASTONISH",
+    "global_offer_session_count":6708,
+    "offer_frequency_encoding":0.0001133334
+  },
+  {
+    "offer_name":"UNLIMITED 4",
+    "global_offer_session_count":6706,
+    "offer_frequency_encoding":0.0001132996
+  },
+  {
+    "offer_name":"LTE_ANY SPIKE",
+    "global_offer_session_count":6442,
+    "offer_frequency_encoding":0.0001088392
+  },
+  {
+    "offer_name":"P_VB_Q_RE_BONUS_2",
+    "global_offer_session_count":6416,
+    "offer_frequency_encoding":0.0001084
+  },
+  {
+    "offer_name":"FTTH_ANY JOY",
+    "global_offer_session_count":6119,
+    "offer_frequency_encoding":0.0001033821
+  },
+  {
+    "offer_name":"P_VB_U_PROYT_12HR",
+    "global_offer_session_count":5923,
+    "offer_frequency_encoding":0.0001000706
+  },
+  {
+    "offer_name":"LTE_ANY STORM",
+    "global_offer_session_count":5883,
+    "offer_frequency_encoding":0.0000993948
+  },
+  {
+    "offer_name":"DummyGrpMember",
+    "global_offer_session_count":5833,
+    "offer_frequency_encoding":0.00009855
+  },
+  {
+    "offer_name":"FTTH_GOV SPECIAL PACKAGE",
+    "global_offer_session_count":5606,
+    "offer_frequency_encoding":0.0000947148
+  },
+  {
+    "offer_name":"Unlimited_3Day_Pass",
+    "global_offer_session_count":5330,
+    "offer_frequency_encoding":0.0000900517
+  },
+  {
+    "offer_name":"ADDON 40",
+    "global_offer_session_count":5234,
+    "offer_frequency_encoding":0.0000884298
+  },
+  {
+    "offer_name":"P_VB_Q_GAME_Re30D_150GB",
+    "global_offer_session_count":5116,
+    "offer_frequency_encoding":0.0000864361
+  },
+  {
+    "offer_name":"P_VB_Q_ENT_OT_100GB",
+    "global_offer_session_count":5091,
+    "offer_frequency_encoding":0.0000860137
+  },
+  {
+    "offer_name":"DATAONE_AMAZE",
+    "global_offer_session_count":4771,
+    "offer_frequency_encoding":0.0000806073
+  },
+  {
+    "offer_name":"ANY STORM",
+    "global_offer_session_count":4383,
+    "offer_frequency_encoding":0.0000740519
+  },
+  {
+    "offer_name":"SDWAN 300GB",
+    "global_offer_session_count":4133,
+    "offer_frequency_encoding":0.0000698281
+  },
+  {
+    "offer_name":"UNLIMITED 8",
+    "global_offer_session_count":4061,
+    "offer_frequency_encoding":0.0000686116
+  },
+  {
+    "offer_name":"WEB BOOSTER",
+    "global_offer_session_count":3839,
+    "offer_frequency_encoding":0.0000648609
+  },
+  {
+    "offer_name":"P_VB_U_ENTEXP_ReM",
+    "global_offer_session_count":3792,
+    "offer_frequency_encoding":0.0000640668
+  },
+  {
+    "offer_name":"Ent WiFi 1TB",
+    "global_offer_session_count":3788,
+    "offer_frequency_encoding":0.0000639992
+  },
+  {
+    "offer_name":"DATAONE_GROW",
+    "global_offer_session_count":3779,
+    "offer_frequency_encoding":0.0000638472
+  },
+  {
+    "offer_name":"ANY SPIKE",
+    "global_offer_session_count":3705,
+    "offer_frequency_encoding":0.0000625969
+  },
+  {
+    "offer_name":"P_VB_U_LTEPEO_Re30",
+    "global_offer_session_count":3525,
+    "offer_frequency_encoding":0.0000595558
+  },
+  {
+    "offer_name":"LTE_WEB LIFE",
+    "global_offer_session_count":3471,
+    "offer_frequency_encoding":0.0000586434
+  },
+  {
+    "offer_name":"DATAONE_ENERGIZED",
+    "global_offer_session_count":3463,
+    "offer_frequency_encoding":0.0000585083
+  },
+  {
+    "offer_name":"LTE_SCHOOLBB PACKAGE 1",
+    "global_offer_session_count":3388,
+    "offer_frequency_encoding":0.0000572411
+  },
+  {
+    "offer_name":"Unlimited_week_Pass",
+    "global_offer_session_count":3279,
+    "offer_frequency_encoding":0.0000553995
+  },
+  {
+    "offer_name":"DATAONE_EXALT",
+    "global_offer_session_count":3105,
+    "offer_frequency_encoding":0.0000524598
+  },
+  {
+    "offer_name":"SCHOOLBB PACKAGE 1",
+    "global_offer_session_count":3089,
+    "offer_frequency_encoding":0.0000521894
+  },
+  {
+    "offer_name":"FTTH_ULTRA ELITE",
+    "global_offer_session_count":2993,
+    "offer_frequency_encoding":0.0000505675
+  },
+  {
+    "offer_name":"OFFICE",
+    "global_offer_session_count":2877,
+    "offer_frequency_encoding":0.0000486076
+  },
+  {
+    "offer_name":"LTE_WEB MASTER",
+    "global_offer_session_count":2859,
+    "offer_frequency_encoding":0.0000483035
+  },
+  {
+    "offer_name":"DATAONE_STARTUP",
+    "global_offer_session_count":2798,
+    "offer_frequency_encoding":0.0000472729
+  },
+  {
+    "offer_name":"VDSL_WEB FAMILY PLUS",
+    "global_offer_session_count":2575,
+    "offer_frequency_encoding":0.0000435053
+  },
+  {
+    "offer_name":"P_VB_Q_ENT_REM_100GB",
+    "global_offer_session_count":2546,
+    "offer_frequency_encoding":0.0000430153
+  },
+  {
+    "offer_name":"Ent WiFi 500GB",
+    "global_offer_session_count":2510,
+    "offer_frequency_encoding":0.0000424071
+  },
+  {
+    "offer_name":"ABHIMAANA",
+    "global_offer_session_count":2451,
+    "offer_frequency_encoding":0.0000414103
+  },
+  {
+    "offer_name":"ADDON 100",
+    "global_offer_session_count":2435,
+    "offer_frequency_encoding":0.0000411399
+  },
+  {
+    "offer_name":"Ent WiFi 50GB",
+    "global_offer_session_count":2343,
+    "offer_frequency_encoding":0.0000395856
+  },
+  {
+    "offer_name":"LTE_UNLIMITED FLASH 10",
+    "global_offer_session_count":2341,
+    "offer_frequency_encoding":0.0000395518
+  },
+  {
+    "offer_name":"SDWAN 50GB",
+    "global_offer_session_count":2327,
+    "offer_frequency_encoding":0.0000393153
+  },
+  {
+    "offer_name":"Ent_30 TB Package",
+    "global_offer_session_count":2303,
+    "offer_frequency_encoding":0.0000389098
+  },
+  {
+    "offer_name":"DATAONE_NEWBORN",
+    "global_offer_session_count":2269,
+    "offer_frequency_encoding":0.0000383353
+  },
+  {
+    "offer_name":"FTTH_UNLIMITED FLASH 25",
+    "global_offer_session_count":2252,
+    "offer_frequency_encoding":0.0000380481
+  },
+  {
+    "offer_name":"DATAONE_ENTERPRISE",
+    "global_offer_session_count":2250,
+    "offer_frequency_encoding":0.0000380143
+  },
+  {
+    "offer_name":"P_VB_U_LCON_Re30D",
+    "global_offer_session_count":2244,
+    "offer_frequency_encoding":0.000037913
+  },
+  {
+    "offer_name":"SDWAN 100GB",
+    "global_offer_session_count":2194,
+    "offer_frequency_encoding":0.0000370682
+  },
+  {
+    "offer_name":"WEB CHAMP",
+    "global_offer_session_count":2167,
+    "offer_frequency_encoding":0.000036612
+  },
+  {
+    "offer_name":"WEB LIFE",
+    "global_offer_session_count":2012,
+    "offer_frequency_encoding":0.0000339933
+  },
+  {
+    "offer_name":"P_VB_Q_YOUTH_25GB",
+    "global_offer_session_count":1888,
+    "offer_frequency_encoding":0.0000318982
+  },
+  {
+    "offer_name":"FTTH_SCHOOL BB",
+    "global_offer_session_count":1865,
+    "offer_frequency_encoding":0.0000315097
+  },
+  {
+    "offer_name":"LTE_WEB CHAMP",
+    "global_offer_session_count":1825,
+    "offer_frequency_encoding":0.0000308338
+  },
+  {
+    "offer_name":"P_VB_Q_ED_OT_30GB",
+    "global_offer_session_count":1806,
+    "offer_frequency_encoding":0.0000305128
+  },
+  {
+    "offer_name":"Ent_50 TB Package",
+    "global_offer_session_count":1680,
+    "offer_frequency_encoding":0.000028384
+  },
+  {
+    "offer_name":"XCEL",
+    "global_offer_session_count":1649,
+    "offer_frequency_encoding":0.0000278603
+  },
+  {
+    "offer_name":"XCITE",
+    "global_offer_session_count":1615,
+    "offer_frequency_encoding":0.0000272858
+  },
+  {
+    "offer_name":"ANY GLAM",
+    "global_offer_session_count":1556,
+    "offer_frequency_encoding":0.000026289
+  },
+  {
+    "offer_name":"ILL",
+    "global_offer_session_count":1510,
+    "offer_frequency_encoding":0.0000255118
+  },
+  {
+    "offer_name":"VOD_1024GB",
+    "global_offer_session_count":1288,
+    "offer_frequency_encoding":0.0000217611
+  },
+  {
+    "offer_name":"SDWAN 150GB",
+    "global_offer_session_count":1220,
+    "offer_frequency_encoding":0.0000206122
+  },
+  {
+    "offer_name":"FTTH1G_WEB PRO",
+    "global_offer_session_count":1169,
+    "offer_frequency_encoding":0.0000197506
+  },
+  {
+    "offer_name":"VBIL_6TB",
+    "global_offer_session_count":1151,
+    "offer_frequency_encoding":0.0000194464
+  },
+  {
+    "offer_name":"Ent_Wifi 1TB Package",
+    "global_offer_session_count":1131,
+    "offer_frequency_encoding":0.0000191085
+  },
+  {
+    "offer_name":"LTE_ANY GLAM",
+    "global_offer_session_count":1050,
+    "offer_frequency_encoding":0.00001774
+  },
+  {
+    "offer_name":"BROADBAND EXPERIENCE",
+    "global_offer_session_count":1039,
+    "offer_frequency_encoding":0.0000175542
+  },
+  {
+    "offer_name":"Ent WiFi 150GB",
+    "global_offer_session_count":1001,
+    "offer_frequency_encoding":0.0000169122
+  },
+  {
+    "offer_name":"ADDON 200",
+    "global_offer_session_count":893,
+    "offer_frequency_encoding":0.0000150875
+  },
+  {
+    "offer_name":"ANY DELIGHT",
+    "global_offer_session_count":839,
+    "offer_frequency_encoding":0.0000141751
+  },
+  {
+    "offer_name":"Ent WiFi 100GB",
+    "global_offer_session_count":818,
+    "offer_frequency_encoding":0.0000138203
+  },
+  {
+    "offer_name":"LTE_GOV SPECIAL PACKAGE",
+    "global_offer_session_count":665,
+    "offer_frequency_encoding":0.0000112353
+  },
+  {
+    "offer_name":"FTTH1G_WEB CHAMP",
+    "global_offer_session_count":649,
+    "offer_frequency_encoding":0.000010965
+  },
+  {
+    "offer_name":"FTTH1G_WEB MASTER",
+    "global_offer_session_count":617,
+    "offer_frequency_encoding":0.0000104244
+  },
+  {
+    "offer_name":"P_VB_Q_YOUTH_100GB",
+    "global_offer_session_count":610,
+    "offer_frequency_encoding":0.0000103061
+  },
+  {
+    "offer_name":"P_VB_U_BONUS_30D",
+    "global_offer_session_count":596,
+    "offer_frequency_encoding":0.0000100696
+  },
+  {
+    "offer_name":"GOV SPECIAL PACKAGE",
+    "global_offer_session_count":572,
+    "offer_frequency_encoding":0.0000096641
+  },
+  {
+    "offer_name":"Ent WiFi 300GB",
+    "global_offer_session_count":564,
+    "offer_frequency_encoding":0.0000095289
+  },
+  {
+    "offer_name":"VOD_12GB",
+    "global_offer_session_count":540,
+    "offer_frequency_encoding":0.0000091234
+  },
+  {
+    "offer_name":"FTTH1G_WEB PREMIER",
+    "global_offer_session_count":534,
+    "offer_frequency_encoding":0.0000090221
+  },
+  {
+    "offer_name":"P_VB_U_YT_ReM",
+    "global_offer_session_count":522,
+    "offer_frequency_encoding":0.0000088193
+  },
+  {
+    "offer_name":"VOD_4GB",
+    "global_offer_session_count":517,
+    "offer_frequency_encoding":0.0000087348
+  },
+  {
+    "offer_name":"FTTH_ANYTIME 75GB",
+    "global_offer_session_count":515,
+    "offer_frequency_encoding":0.0000087011
+  },
+  {
+    "offer_name":"Ent_25 TB Package",
+    "global_offer_session_count":453,
+    "offer_frequency_encoding":0.0000076536
+  },
+  {
+    "offer_name":"P_VB_Q_ED_Re30D_30GB",
+    "global_offer_session_count":453,
+    "offer_frequency_encoding":0.0000076536
+  },
+  {
+    "offer_name":"LTE_ANY DELIGHT",
+    "global_offer_session_count":400,
+    "offer_frequency_encoding":0.0000067581
+  },
+  {
+    "offer_name":"FTTH1G_ANY GLAM",
+    "global_offer_session_count":396,
+    "offer_frequency_encoding":0.0000066905
+  },
+  {
+    "offer_name":"VDSL_WEB FAMILY XTRA",
+    "global_offer_session_count":383,
+    "offer_frequency_encoding":0.0000064709
+  },
+  {
+    "offer_name":"P_VB_Q_ML_ReM",
+    "global_offer_session_count":352,
+    "offer_frequency_encoding":0.0000059471
+  },
+  {
+    "offer_name":"FTTH_ANY BEAT",
+    "global_offer_session_count":341,
+    "offer_frequency_encoding":0.0000057613
+  },
+  {
+    "offer_name":"FTTH_SCHOOLBB PACKAGE 2",
+    "global_offer_session_count":312,
+    "offer_frequency_encoding":0.0000052713
+  },
+  {
+    "offer_name":"LTE_SCHOOL BB",
+    "global_offer_session_count":288,
+    "offer_frequency_encoding":0.0000048658
+  },
+  {
+    "offer_name":"Ent WiFi 2TB",
+    "global_offer_session_count":276,
+    "offer_frequency_encoding":0.0000046631
+  },
+  {
+    "offer_name":"P_VB_Q_MSG_ReM_40GB",
+    "global_offer_session_count":260,
+    "offer_frequency_encoding":0.0000043928
+  },
+  {
+    "offer_name":"P_VB_Q_ED_OT_100GB",
+    "global_offer_session_count":229,
+    "offer_frequency_encoding":0.000003869
+  },
+  {
+    "offer_name":"Ent_Wifi 500GB Package",
+    "global_offer_session_count":221,
+    "offer_frequency_encoding":0.0000037339
+  },
+  {
+    "offer_name":"OFFICE 1IP",
+    "global_offer_session_count":212,
+    "offer_frequency_encoding":0.0000035818
+  },
+  {
+    "offer_name":"FTTH_SCHOOLBB PACKAGE 3",
+    "global_offer_session_count":204,
+    "offer_frequency_encoding":0.0000034466
+  },
+  {
+    "offer_name":"Ent_7 TB Package",
+    "global_offer_session_count":191,
+    "offer_frequency_encoding":0.000003227
+  },
+  {
+    "offer_name":"P_VB_Q_ED_Re30D_100GB",
+    "global_offer_session_count":184,
+    "offer_frequency_encoding":0.0000031087
+  },
+  {
+    "offer_name":"P_VB_U_PROYT_4HR",
+    "global_offer_session_count":175,
+    "offer_frequency_encoding":0.0000029567
+  },
+  {
+    "offer_name":"LTE_WEB PREMIER",
+    "global_offer_session_count":170,
+    "offer_frequency_encoding":0.0000028722
+  },
+  {
+    "offer_name":"FTTH1G_ANY STORM",
+    "global_offer_session_count":165,
+    "offer_frequency_encoding":0.0000027877
+  },
+  {
+    "offer_name":"P_BD_A_BONUS2",
+    "global_offer_session_count":162,
+    "offer_frequency_encoding":0.000002737
+  },
+  {
+    "offer_name":"Ent_Wifi 2TB Package",
+    "global_offer_session_count":134,
+    "offer_frequency_encoding":0.000002264
+  },
+  {
+    "offer_name":"VDSL_WEB PRO",
+    "global_offer_session_count":134,
+    "offer_frequency_encoding":0.000002264
+  },
+  {
+    "offer_name":"FTTH_SCHOOLBB PACKAGE 6",
+    "global_offer_session_count":117,
+    "offer_frequency_encoding":0.0000019767
+  },
+  {
+    "offer_name":"XCEL 1IP",
+    "global_offer_session_count":112,
+    "offer_frequency_encoding":0.0000018923
+  },
+  {
+    "offer_name":"P_VB_Q_BONUS 100GB",
+    "global_offer_session_count":111,
+    "offer_frequency_encoding":0.0000018754
+  },
+  {
+    "offer_name":"SLT SHARE HOLDER PKG",
+    "global_offer_session_count":106,
+    "offer_frequency_encoding":0.0000017909
+  },
+  {
+    "offer_name":"SDWAN 200GB",
+    "global_offer_session_count":105,
+    "offer_frequency_encoding":0.000001774
+  },
+  {
+    "offer_name":"LTE_ANY XTREME",
+    "global_offer_session_count":105,
+    "offer_frequency_encoding":0.000001774
+  },
+  {
+    "offer_name":"GMOA_MEDICAL",
+    "global_offer_session_count":100,
+    "offer_frequency_encoding":0.0000016895
+  },
+  {
+    "offer_name":"P_VB_PRE_SMYT",
+    "global_offer_session_count":93,
+    "offer_frequency_encoding":0.0000015713
+  },
+  {
+    "offer_name":"FTTH1G_WEB LIFE",
+    "global_offer_session_count":93,
+    "offer_frequency_encoding":0.0000015713
+  },
+  {
+    "offer_name":"P_VB_Q_BONUS 20GB",
+    "global_offer_session_count":88,
+    "offer_frequency_encoding":0.0000014868
+  },
+  {
+    "offer_name":"P_VB_Q_PROYT_OT_25GB",
+    "global_offer_session_count":85,
+    "offer_frequency_encoding":0.0000014361
+  },
+  {
+    "offer_name":"P_VB_Q_BONUS 500GB",
+    "global_offer_session_count":74,
+    "offer_frequency_encoding":0.0000012502
+  },
+  {
+    "offer_name":"SDWAN 400GB",
+    "global_offer_session_count":72,
+    "offer_frequency_encoding":0.0000012165
+  },
+  {
+    "offer_name":"SDWAN 500GB",
+    "global_offer_session_count":71,
+    "offer_frequency_encoding":0.0000011996
+  },
+  {
+    "offer_name":"Ent_6 TB Package",
+    "global_offer_session_count":70,
+    "offer_frequency_encoding":0.0000011827
+  },
+  {
+    "offer_name":"LTE_WEB INSPIRE",
+    "global_offer_session_count":68,
+    "offer_frequency_encoding":0.0000011489
+  },
+  {
+    "offer_name":"4G_VOICE PAL PREMIUM",
+    "global_offer_session_count":54,
+    "offer_frequency_encoding":0.0000009123
+  },
+  {
+    "offer_name":"P_VB_Q_ADDON 5_OT",
+    "global_offer_session_count":50,
+    "offer_frequency_encoding":0.0000008448
+  },
+  {
+    "offer_name":"SCHOOL BB",
+    "global_offer_session_count":48,
+    "offer_frequency_encoding":0.000000811
+  },
+  {
+    "offer_name":"FTTH_ULTRA FLASH SURFER",
+    "global_offer_session_count":41,
+    "offer_frequency_encoding":0.0000006927
+  },
+  {
+    "offer_name":"P_VB_Q_YT_ReM_25GB",
+    "global_offer_session_count":40,
+    "offer_frequency_encoding":0.0000006758
+  },
+  {
+    "offer_name":"P_VB_Q_GAME_OT_25GB",
+    "global_offer_session_count":35,
+    "offer_frequency_encoding":0.0000005913
+  },
+  {
+    "offer_name":"Ent_Wifi 50GB Package",
+    "global_offer_session_count":35,
+    "offer_frequency_encoding":0.0000005913
+  },
+  {
+    "offer_name":"SLT STAFF TRIPLE PLAY",
+    "global_offer_session_count":26,
+    "offer_frequency_encoding":0.0000004393
+  },
+  {
+    "offer_name":"HOME PLUS",
+    "global_offer_session_count":24,
+    "offer_frequency_encoding":0.0000004055
+  },
+  {
+    "offer_name":"FTTH_ULTRA FLASH ELITE",
+    "global_offer_session_count":10,
+    "offer_frequency_encoding":0.000000169
+  },
+  {
+    "offer_name":"FTTH_SCHOOLBB PACKAGE 4",
+    "global_offer_session_count":4,
+    "offer_frequency_encoding":0.0000000676
+  },
+  {
+    "offer_name":"P_BD_A_LOYALTY1",
+    "global_offer_session_count":4,
+    "offer_frequency_encoding":0.0000000676
+  },
+  {
+    "offer_name":"FLEXINET100",
+    "global_offer_session_count":4,
+    "offer_frequency_encoding":0.0000000676
+  },
+  {
+    "offer_name":"P_VB_Q_ADDON 10_OT",
+    "global_offer_session_count":2,
+    "offer_frequency_encoding":0.0000000338
+  },
+  {
+    "offer_name":"WEB SURFER PLUS",
+    "global_offer_session_count":2,
+    "offer_frequency_encoding":0.0000000338
+  }
+]

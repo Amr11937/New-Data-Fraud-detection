@@ -1,0 +1,12 @@
+{
+  "sessions_per_day": 57.0,
+  "daily_usage_gb": 0.8956178994849324,
+  "average_session_usage_gb": 0.016008115991532245,
+  "total_duration_minutes": 139920.0,
+  "average_session_duration_minutes": 2430.714285714286,
+  "total_input_gb": 0.1794403102248907,
+  "total_output_gb": 0.1622880706563592,
+  "offer_count": 1.0,
+  "Ratio": 1.5099526941706802,
+  "offer_frequency_encoding": 0.050349583849202954
+}

@@ -1,0 +1,55 @@
+# Rule engine thresholds, ported from the Broadband FMS rules.yaml and
+# re-mapped onto PCRF's actual feature set (daily_usage_gb instead of
+# total_usage_mb, no per-session max is stored so rule_05 was
+# repurposed for session-count bursts, etc).
+#
+# IMPORTANT -- these upper_limit values are PLACEHOLDERS, not
+# data-verified thresholds. Broadband's original limits were tuned
+# against its own (synthetic) feature distribution; these were derived
+# as a flat 5x multiple of PCRF's real feature_medians.json values,
+# which only gives a rough "clearly above typical" cutoff, not a
+# proper percentile-based threshold.
+#
+# Before relying on these in production, run:
+#   python scripts/calibrate_rules.py
+# which queries the live subscribers_daily table for real p90/p95/p99
+# per feature and prints a recommended replacement for this file.
+
+rule_01:
+  feature: daily_usage_gb
+  upper_limit: 4.48          # ~5x median (0.8956)
+  points: 15
+
+rule_02:
+  feature: total_input_gb
+  upper_limit: 0.90          # ~5x median (0.1794)
+  points: 10
+
+rule_03:
+  feature: total_output_gb
+  upper_limit: 0.81          # ~5x median (0.1623)
+  points: 10
+
+rule_04:
+  feature: average_session_usage_gb
+  upper_limit: 0.08          # ~5x median (0.01601)
+  points: 20
+
+rule_05:
+  feature: sessions_per_day
+  upper_limit: 285           # ~5x median (57) -- session-count burst,
+  points: 25                 # replaces Broadband's "max single session"
+                              # rule, which needs per-session data this
+                              # schema doesn't store
+
+rule_06:
+  feature: offer_count
+  upper_limit: 3             # median is 1 -- 3+ offers in one day is unusual
+  points: 15
+
+rule_07:
+  feature: Ratio
+  upper_limit: 7.5           # ~5x median (1.510)
+  points: 5
+
+max_raw_score: 100
