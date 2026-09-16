@@ -20,10 +20,13 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from dotenv import load_dotenv  # noqa: E402
 from sqlalchemy import create_engine, text  # noqa: E402
 
 from app.ensemble import ensemble_predict  # noqa: E402
 from app.rules import rule_based_score  # noqa: E402
+
+load_dotenv()
 
 
 def main() -> None:

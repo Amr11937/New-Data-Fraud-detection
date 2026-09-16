@@ -23,7 +23,10 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from dotenv import load_dotenv  # noqa: E402
 from sqlalchemy import create_engine, text  # noqa: E402
+
+load_dotenv()
 
 FEATURES = {
     "rule_01": "daily_usage_gb",

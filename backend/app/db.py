@@ -1,8 +1,11 @@
 import os
 from contextlib import contextmanager
 
+from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+
+load_dotenv()
 
 # Example: postgresql+psycopg2://USER:PASSWORD@HOST:5432/DBNAME
 DATABASE_URL = os.environ["DATABASE_URL"]
