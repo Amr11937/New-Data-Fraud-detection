@@ -15,6 +15,7 @@ import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
 import InsightsIcon from '@mui/icons-material/Insights';
 import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
+import LockResetIcon from '@mui/icons-material/LockReset';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { AlertBanner } from '@/components/AlertBanner';
 
@@ -25,6 +26,7 @@ const NAV_ITEMS = [
   { to: '/dashboard/subscribers', label: 'Subscribers', icon: <PeopleIcon /> },
   { to: '/dashboard/risk', label: 'Risk analytics', icon: <InsightsIcon /> },
   { to: '/dashboard/health', label: 'System health', icon: <MonitorHeartIcon /> },
+  { to: '/dashboard/demask', label: 'Demask', icon: <LockResetIcon /> },
 ];
 
 export default function MainLayout() {

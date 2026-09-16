@@ -7,6 +7,7 @@ import { ExecutiveSummaryPage } from '@/pages/ExecutiveSummaryPage';
 import { SubscribersPage } from '@/pages/SubscribersPage';
 import { RiskAnalyticsPage } from '@/pages/RiskAnalyticsPage';
 import { SystemHealthPage } from '@/pages/SystemHealthPage';
+import { DemaskPage } from '@/pages/DemaskPage';
 
 const theme = createTheme({
   palette: {
@@ -36,6 +37,7 @@ export default function App() {
               <Route path="subscribers" element={<SubscribersPage />} />
               <Route path="risk" element={<RiskAnalyticsPage />} />
               <Route path="health" element={<SystemHealthPage />} />
+              <Route path="demask" element={<DemaskPage />} />
             </Route>
             <Route path="*" element={<Navigate to="/dashboard" replace />} />
           </Routes>

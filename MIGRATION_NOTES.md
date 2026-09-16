@@ -19,6 +19,35 @@
   correctly served by the backend's SPA fallback route (verified: a
   client-side route like `/dashboard/subscribers` returns the built
   `index.html`, and `/api/health` keeps working alongside it).
+- **Demask (subscriber ID recovery)**, ported from
+  [chinthakadd7/Demask](https://github.com/chinthakadd7/Demask) and
+  merged in under `/api/demask/*` + the "Demask" nav page instead of
+  running as its own service:
+  - `POST /api/demask/mapping` against Demask's own
+    `sample_data/mapping_input.csv` + `mapping_lookup.csv` -- returned
+    8 `MAPPED` / 2 `UNMAPPED` rows (matching the lookup CSV's actual
+    coverage) with correct `X-Total-Records` / `X-Processed` /
+    `X-Unprocessed` / `X-Errors` headers.
+  - `POST /api/demask/encryption` against
+    `sample_data/encryption_input.csv` with `demo_cipher` -- all 10
+    `ENC_<id>_<tag>` tokens decrypted back to their original IDs.
+  - `DemoCipherProvider` verified as a true round-trip (encrypt then
+    decrypt returns the original value) directly in Python, not just
+    against the demo token shortcut.
+  - `FernetProvider` (real AES, via the `cryptography` package added
+    to `requirements.txt`) verified directly against a locally
+    generated throwaway Fernet key/token pair -- decrypts correctly.
+  - `GET /api/demask/encryption/methods` correctly lists
+    `demo_cipher`, `aes_token`, and `fernet`, with `configured: true`
+    once `ENCRYPTION_KEY` is set.
+  - A malformed request (missing input column) correctly returns
+    `422` with a descriptive `detail` message.
+  - `npm run dev` was **not** exercised interactively for the new
+    `DemaskPage` (no browser in this environment) -- only the API
+    layer and the production build/SPA-fallback were verified end to
+    end. Manually click through both flows (mapping + encryption,
+    including the progress bar and CSV download) before relying on
+    the page.
 
 None of this was tested against a real Postgres connection, a real S3
 bucket, or real SES sending -- I don't have credentials for your AWS
@@ -61,6 +90,16 @@ layer itself is only syntax- and logic-verified, not connection-tested.
 5. **`INGEST_S3_BUCKET`, SES sender/recipients, and `DATABASE_URL`**
    are all unset placeholders in `.env.example` -- fill in your actual
    values before deploying.
+
+6. **`ENCRYPTION_KEY` is unset in `.env.example`** -- Demask's
+   endpoints work without it (mapping doesn't need it, and the demo
+   token shortcut in `DemoCipherProvider.decrypt_value` handles the
+   `ENC_<id>_<tag>` sample data regardless of key), but any real
+   decryption needs a real key set. The Fernet key used above for
+   testing was generated locally for this session
+   (`Fernet.generate_key()`) and is not stored anywhere -- generate
+   and set your own before using the `fernet` provider for anything
+   real.
 
 ## Frontend scope, vs. Broadband's original 7-page dashboard
 

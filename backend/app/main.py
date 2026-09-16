@@ -15,7 +15,7 @@ from fastapi.staticfiles import StaticFiles
 
 from . import ingest_worker, scheduler
 from .model_service import model_service  # noqa: F401 -- import triggers artifact load at startup
-from .routers import dashboard, reports, scoring, subscribers, ws
+from .routers import dashboard, demask, reports, scoring, subscribers, ws
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("pcrf_fms")
@@ -62,6 +62,7 @@ app.include_router(subscribers.router)
 app.include_router(dashboard.router)
 app.include_router(reports.router)
 app.include_router(ws.router)
+app.include_router(demask.router)
 
 
 @app.get("/api/health")

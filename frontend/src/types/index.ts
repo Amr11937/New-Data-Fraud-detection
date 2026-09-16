@@ -217,3 +217,22 @@ export interface DateRange {
   dateFrom: string | null;
   dateTo: string | null;
 }
+
+// ---------------------------------------------------------------------------
+// Demask -- subscriber ID recovery (mapping / decryption)
+// ---------------------------------------------------------------------------
+
+export type DemaskMethod = 'mapping' | 'encryption';
+
+export interface EncryptionMethodsResponse {
+  methods: string[];
+  default: string | null;
+  configured: boolean;
+}
+
+export interface ProcessingStats {
+  total: number;
+  processed: number;
+  unprocessed: number;
+  errors: number;
+}

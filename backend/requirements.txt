@@ -14,3 +14,4 @@ PyYAML==6.0.2
 reportlab==4.2.5
 APScheduler==3.10.4
 python-multipart==0.0.19
+cryptography==50.0.1
