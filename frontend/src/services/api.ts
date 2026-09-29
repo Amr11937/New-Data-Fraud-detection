@@ -9,6 +9,7 @@
 import axios from 'axios';
 import type {
   AnalyticsWindowsResponse,
+  CalendarDatesResponse,
   DailyPoint,
   KpiResponse,
   PackageStatsResponse,
@@ -106,6 +107,11 @@ export const fetchRuleStatistics = async (
 
 export const fetchSystemHealth = async (): Promise<SystemHealthResponse> => {
   const { data } = await api.get('/api/system-health');
+  return data;
+};
+
+export const fetchCalendarDates = async (): Promise<CalendarDatesResponse> => {
+  const { data } = await api.get('/api/analytics/calendar-dates');
   return data;
 };
 

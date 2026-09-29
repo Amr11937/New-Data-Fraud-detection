@@ -135,6 +135,7 @@ class KpiResponse(BaseModel):
     block_count: int
     review_count: int
     allow_count: int
+    total_records: int
 
 
 class DailyPoint(BaseModel):
@@ -185,6 +186,16 @@ class AnalyticsWindowsResponse(BaseModel):
     as_of_date: date
     last_7_days: WindowSummary
     last_30_days: WindowSummary
+
+
+class CalendarDateInfo(BaseModel):
+    date: date
+    record_count: int
+
+
+class CalendarDatesResponse(BaseModel):
+    dates: list[CalendarDateInfo]
+    total_records: int
 
 
 # ---------- Rule statistics (added by the merge) ----------

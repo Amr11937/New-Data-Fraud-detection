@@ -52,6 +52,13 @@ export function useSystemHealth() {
   });
 }
 
+export function useCalendarDates() {
+  return useQuery({
+    queryKey: ['calendar-dates'],
+    queryFn: api.fetchCalendarDates,
+  });
+}
+
 export function useSubscribers(params: {
   dateFrom?: string | null;
   dateTo?: string | null;

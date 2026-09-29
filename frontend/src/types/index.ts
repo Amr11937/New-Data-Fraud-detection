@@ -24,6 +24,17 @@ export interface KpiResponse {
   block_count: number;
   review_count: number;
   allow_count: number;
+  total_records: number;
+}
+
+export interface CalendarDateInfo {
+  date: string;
+  record_count: number;
+}
+
+export interface CalendarDatesResponse {
+  dates: CalendarDateInfo[];
+  total_records: number;
 }
 
 export interface DailyPoint {

@@ -37,16 +37,19 @@ export function ExecutiveSummaryPage() {
       <DateRangeFilter value={range} onChange={setRange} />
 
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={4} lg={2.4}>
+          <KpiCard label="Total records" value={kpis?.total_records?.toLocaleString() ?? '—'} />
+        </Grid>
+        <Grid item xs={12} sm={6} md={4} lg={2.4}>
           <KpiCard label="Total subscribers" value={kpis?.total_subscribers ?? '—'} />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={4} lg={2.4}>
           <KpiCard label="Total sessions" value={kpis?.total_sessions?.toLocaleString() ?? '—'} />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={4} lg={2.4}>
           <KpiCard label="Average risk" value={kpis?.average_risk?.toFixed(1) ?? '—'} />
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={4} lg={2.4}>
           <KpiCard
             label="Block / Review"
             value={`${kpis?.block_count ?? 0} / ${kpis?.review_count ?? 0}`}

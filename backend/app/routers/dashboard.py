@@ -8,6 +8,8 @@ from ..db import get_session
 from ..rules import load_rules
 from ..schemas import (
     AnalyticsWindowsResponse,
+    CalendarDateInfo,
+    CalendarDatesResponse,
     DailyPoint,
     KpiResponse,
     PackageStat,
@@ -34,6 +36,7 @@ def get_kpis(
 
     sql = text(f"""
         SELECT
+            COUNT(*)                           AS total_records,
             COUNT(DISTINCT subscriber_id)      AS total_subscribers,
             COALESCE(SUM(sessions_per_day), 0) AS total_sessions,
             COALESCE(SUM(total_output_gb), 0)  AS total_upload_gb,
@@ -62,6 +65,7 @@ def get_kpis(
     active_days = int(row["active_days"]) or 1
     total_sessions = int(row["total_sessions"])
     return KpiResponse(
+        total_records=int(row["total_records"]),
         total_subscribers=int(row["total_subscribers"]),
         total_packages=int(total_packages),
         total_sessions=total_sessions,
@@ -117,6 +121,21 @@ def get_daily_trend(
         )
         for r in rows
     ]
+
+
+@router.get("/analytics/calendar-dates", response_model=CalendarDatesResponse)
+def get_calendar_dates() -> CalendarDatesResponse:
+    sql = text("""
+        SELECT session_date AS date, COUNT(*) AS record_count
+        FROM subscribers_daily
+        GROUP BY session_date
+        ORDER BY session_date
+    """)
+    with get_session() as session:
+        rows = session.execute(sql).mappings().all()
+
+    dates = [CalendarDateInfo(date=r["date"], record_count=int(r["record_count"])) for r in rows]
+    return CalendarDatesResponse(dates=dates, total_records=sum(d.record_count for d in dates))
 
 
 def _window_summary(session, label: str, date_from: date_type, date_to: date_type) -> WindowSummary:
