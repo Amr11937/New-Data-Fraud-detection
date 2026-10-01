@@ -15,13 +15,14 @@ import {
 } from '@mui/material';
 import ReactECharts from 'echarts-for-react';
 import { DateRangeFilter } from '@/components/DateRangeFilter';
-import { usePackageStats, useRuleStatistics } from '@/hooks/useDashboard';
+import { useDailyTrend, usePackageStats, useRuleStatistics } from '@/hooks/useDashboard';
 import type { DateRange } from '@/types';
 
 export function RiskAnalyticsPage() {
   const [range, setRange] = useState<DateRange>({ dateFrom: null, dateTo: null });
   const { data: ruleStats } = useRuleStatistics(range);
   const { data: packageStats } = usePackageStats();
+  const { data: daily } = useDailyTrend(range);
 
   const packagePieOption = {
     tooltip: { trigger: 'item' },
@@ -30,6 +31,36 @@ export function RiskAnalyticsPage() {
         type: 'pie',
         radius: '65%',
         data: (packageStats?.distribution ?? []).slice(0, 10).map((p) => ({ name: p.name, value: p.value })),
+      },
+    ],
+  };
+
+  const sessionDurationOption = {
+    tooltip: { trigger: 'axis' },
+    xAxis: { type: 'category', data: daily?.map((d) => d.date) ?? [] },
+    yAxis: { type: 'value', name: 'Minutes' },
+    series: [
+      {
+        name: 'Total Session Duration',
+        type: 'line',
+        areaStyle: {},
+        data: daily?.map((d) => d.total_duration_minutes ?? 0) ?? [],
+      },
+    ],
+  };
+
+  const downloadUploadOption = {
+    tooltip: { trigger: 'axis' },
+    legend: { data: ['Average Download (GB)', 'Average Upload (GB)', 'Average Total Usage (GB)'] },
+    xAxis: { type: 'category', data: daily?.map((d) => d.date) ?? [] },
+    yAxis: { type: 'value', name: 'GB' },
+    series: [
+      { name: 'Average Download (GB)', type: 'line', data: daily?.map((d) => d.average_download_gb ?? 0) ?? [] },
+      { name: 'Average Upload (GB)', type: 'line', data: daily?.map((d) => d.average_upload_gb ?? 0) ?? [] },
+      {
+        name: 'Average Total Usage (GB)',
+        type: 'line',
+        data: daily?.map((d) => d.average_total_usage_gb ?? 0) ?? [],
       },
     ],
   };
@@ -99,6 +130,35 @@ export function RiskAnalyticsPage() {
                 <Typography>Block: {ruleStats?.block_count ?? 0}</Typography>
                 <Typography color="text.secondary">Total rows: {ruleStats?.total_rows ?? 0}</Typography>
               </Stack>
+            </CardContent>
+          </Card>
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={6}>
+          <Card variant="outlined">
+            <CardContent>
+              <Typography variant="subtitle2" gutterBottom>
+                Session Duration Trend
+              </Typography>
+              <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 1 }}>
+                Total session duration per day
+              </Typography>
+              <ReactECharts option={sessionDurationOption} style={{ height: 320 }} notMerge />
+            </CardContent>
+          </Card>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Card variant="outlined">
+            <CardContent>
+              <Typography variant="subtitle2" gutterBottom>
+                Download &amp; Upload Trend
+              </Typography>
+              <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 1 }}>
+                Average download, upload and total usage per day
+              </Typography>
+              <ReactECharts option={downloadUploadOption} style={{ height: 320 }} notMerge />
             </CardContent>
           </Card>
         </Grid>

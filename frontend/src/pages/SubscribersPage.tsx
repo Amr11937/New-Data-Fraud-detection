@@ -1,10 +1,15 @@
 import { useMemo, useState } from 'react';
 import {
+  AppBar,
   Box,
   Button,
-  Drawer,
+  Container,
+  Dialog,
+  Grid,
+  IconButton,
   MenuItem,
   Paper,
+  Slide,
   Stack,
   Table,
   TableBody,
@@ -14,8 +19,13 @@ import {
   TablePagination,
   TableRow,
   TextField,
+  Toolbar,
   Typography,
 } from '@mui/material';
+import type { TransitionProps } from '@mui/material/transitions';
+import { forwardRef, type ReactElement, type Ref } from 'react';
+import { KpiCard } from '@/components/KpiCard';
+import CloseIcon from '@mui/icons-material/Close';
 import DownloadIcon from '@mui/icons-material/Download';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import { DateRangeFilter } from '@/components/DateRangeFilter';
@@ -23,6 +33,13 @@ import { DecisionBadge } from '@/components/DecisionBadge';
 import { useSubscriberDetail, useSubscribers } from '@/hooks/useDashboard';
 import { downloadPdfReport } from '@/services/api';
 import type { DateRange } from '@/types';
+
+const FullScreenTransition = forwardRef(function FullScreenTransition(
+  props: TransitionProps & { children: ReactElement },
+  ref: Ref<unknown>
+) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
 function toCsv(rows: Record<string, unknown>[]): string {
   if (rows.length === 0) return '';
@@ -160,33 +177,81 @@ export function SubscribersPage() {
         />
       </TableContainer>
 
-      <Drawer anchor="right" open={!!selected} onClose={() => setSelected(null)}>
-        <Box sx={{ width: 420, p: 3 }}>
+      <Dialog
+        fullScreen
+        open={!!selected}
+        onClose={() => setSelected(null)}
+        TransitionComponent={FullScreenTransition}
+      >
+        <AppBar position="sticky" color="default" elevation={1}>
+          <Toolbar>
+            <Typography variant="h6" sx={{ flexGrow: 1 }}>
+              Subscriber {detail?.subscriber_id ?? selected}
+            </Typography>
+            <IconButton edge="end" onClick={() => setSelected(null)} aria-label="close">
+              <CloseIcon />
+            </IconButton>
+          </Toolbar>
+        </AppBar>
+
+        <Container maxWidth="lg" sx={{ py: 3 }}>
           {detail && (
             <Stack spacing={2}>
-              <Typography variant="h6">{detail.subscriber_id}</Typography>
-              <Typography variant="body2" color="text.secondary">
-                Account {detail.account_num ?? '—'} · last seen {detail.latest_session_date}
-              </Typography>
+              <Box>
+                <Typography variant="overline" color="text.secondary">
+                  Selected subscriber
+                </Typography>
+                <Typography variant="h5">{detail.subscriber_id}</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Original subscriber and account identifiers are shown.
+                </Typography>
+              </Box>
+
               <Stack direction="row" spacing={1} alignItems="center">
                 <DecisionBadge decision={detail.latest_decision} />
                 <Typography variant="body2">
-                  final score {detail.latest_final_score?.toFixed(3) ?? '—'}
+                  Latest triggered rules: {detail.triggered_rules_latest.join(', ') || 'none'}
                 </Typography>
               </Stack>
-              <Typography variant="body2">
-                Max risk {detail.maximum_risk_score.toFixed(1)} · avg risk {detail.average_risk_score.toFixed(1)} ·{' '}
-                {detail.history_days} days of history
-              </Typography>
-              <Typography variant="body2">Offer: {detail.offer_name ?? '—'}</Typography>
-              <Typography variant="body2">
-                Latest triggered rules: {detail.triggered_rules_latest.join(', ') || 'none'}
-              </Typography>
+
+              <Grid container spacing={2}>
+                {[
+                  { label: 'Account', value: detail.account_num ?? '—' },
+                  { label: 'Latest date', value: detail.latest_session_date },
+                  { label: 'Maximum risk', value: `${detail.maximum_risk_score.toFixed(2)} / 100` },
+                  { label: 'Average risk', value: detail.average_risk_score.toFixed(2) },
+                  {
+                    label: 'Score range',
+                    value: `${((detail.latest_final_score ?? detail.maximum_risk_score / 100) * 100).toFixed(2)} score`,
+                  },
+                  { label: 'Sessions / day', value: detail.sessions_per_day.toLocaleString() },
+                  { label: 'Daily usage', value: `${detail.daily_usage_gb.toFixed(2)} GB` },
+                  { label: 'Avg session usage', value: `${(detail.average_session_usage_gb ?? 0).toFixed(2)} GB` },
+                  {
+                    label: 'Duration',
+                    value: `${(detail.total_duration_minutes ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} min`,
+                  },
+                  {
+                    label: 'Avg session duration',
+                    value: `${(detail.average_session_duration_minutes ?? 0).toFixed(2)} min`,
+                  },
+                  { label: 'Input', value: `${(detail.total_input_gb ?? 0).toFixed(2)} GB` },
+                  { label: 'Output', value: `${(detail.total_output_gb ?? 0).toFixed(2)} GB` },
+                  { label: 'Offer encoding', value: detail.offer_name ?? '—' },
+                  { label: 'Available history days', value: detail.history_days },
+                  { label: 'Total source records', value: '—' },
+                  { label: 'Risk level', value: detail.risk_level },
+                ].map((tile) => (
+                  <Grid item xs={6} sm={4} md={3} key={tile.label}>
+                    <KpiCard label={tile.label.toUpperCase()} value={tile.value} />
+                  </Grid>
+                ))}
+              </Grid>
 
               <Typography variant="subtitle2" sx={{ mt: 2 }}>
                 Score history ({historyChartData.length} days)
               </Typography>
-              <TableContainer sx={{ maxHeight: 320 }}>
+              <TableContainer sx={{ maxHeight: 420 }}>
                 <Table size="small" stickyHeader>
                   <TableHead>
                     <TableRow>
@@ -210,8 +275,8 @@ export function SubscribersPage() {
               </TableContainer>
             </Stack>
           )}
-        </Box>
-      </Drawer>
+        </Container>
+      </Dialog>
     </Stack>
   );
 }

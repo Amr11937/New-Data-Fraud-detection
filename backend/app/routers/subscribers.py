@@ -42,22 +42,36 @@ def list_subscribers(
         date_to = date_to or date
 
     if date_from is not None or date_to is not None:
+        # history_days comes from the precomputed subscriber_summary
+        # (app.ingest_core.refresh_subscriber_summary) instead of an
+        # unconditional full-table GROUP BY that used to run on every
+        # single request regardless of this date filter.
         base_cte = """
-            SELECT subscriber_id, account_num, session_date, risk_score_0_100,
-                   sessions_per_day, daily_usage_gb, rule_score, ml_score,
-                   final_score, decision, triggered_rules
-            FROM subscribers_daily
-            WHERE (:date_from IS NULL OR session_date >= :date_from)
-              AND (:date_to IS NULL OR session_date <= :date_to)
+            SELECT s.subscriber_id, s.account_num, s.session_date, s.risk_score_0_100,
+                   s.sessions_per_day, s.daily_usage_gb, s.rule_score, s.ml_score,
+                   s.final_score, s.decision, s.triggered_rules, ss.history_days
+            FROM subscribers_daily s
+            JOIN subscriber_summary ss ON ss.subscriber_id = s.subscriber_id
+            WHERE (:date_from IS NULL OR s.session_date >= :date_from)
+              AND (:date_to IS NULL OR s.session_date <= :date_to)
         """
     else:
+        # subscriber_summary already holds exactly the latest-record view
+        # (one row per subscriber), so no DISTINCT ON sort over the full
+        # table is needed here.
         base_cte = """
-            SELECT DISTINCT ON (subscriber_id)
-                   subscriber_id, account_num, session_date, risk_score_0_100,
-                   sessions_per_day, daily_usage_gb, rule_score, ml_score,
-                   final_score, decision, triggered_rules
-            FROM subscribers_daily
-            ORDER BY subscriber_id, session_date DESC
+            SELECT subscriber_id, account_num,
+                   latest_session_date AS session_date,
+                   latest_risk_score_0_100 AS risk_score_0_100,
+                   latest_sessions_per_day AS sessions_per_day,
+                   latest_daily_usage_gb AS daily_usage_gb,
+                   latest_rule_score AS rule_score,
+                   latest_ml_score AS ml_score,
+                   latest_final_score AS final_score,
+                   latest_decision AS decision,
+                   latest_triggered_rules AS triggered_rules,
+                   history_days
+            FROM subscriber_summary
         """
 
     where_clauses = ["risk_score_0_100 >= :min_risk", "risk_score_0_100 <= :max_risk"]
@@ -74,17 +88,8 @@ def list_subscribers(
 
     page_sql = text(f"""
         WITH base AS ({base_cte}),
-        filtered AS (SELECT * FROM base WHERE {where_sql}),
-        with_history AS (
-            SELECT f.*, h.history_days
-            FROM filtered f
-            JOIN (
-                SELECT subscriber_id, COUNT(DISTINCT session_date) AS history_days
-                FROM subscribers_daily
-                GROUP BY subscriber_id
-            ) h ON h.subscriber_id = f.subscriber_id
-        )
-        SELECT * FROM with_history
+        filtered AS (SELECT * FROM base WHERE {where_sql})
+        SELECT * FROM filtered
         ORDER BY COALESCE(final_score, risk_score_0_100 / 100.0) DESC, subscriber_id ASC
         LIMIT :limit OFFSET :offset
     """)

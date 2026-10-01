@@ -32,6 +32,34 @@ def get_kpis(
     date_from: Optional[date_type] = Query(None),
     date_to: Optional[date_type] = Query(None),
 ) -> KpiResponse:
+    # The dashboard's default, unfiltered load hits this case -- serve the
+    # precomputed snapshot (see app.ingest_core.refresh_kpi_snapshot)
+    # instead of a full unindexed scan, which is 20s+ at 4.5M+ rows.
+    # Date-filtered requests fall through to the live query below, which
+    # uses idx_subscribers_daily_date and is cheap for real-world windows.
+    if date_from is None and date_to is None:
+        with get_session() as session:
+            snap = session.execute(text("SELECT * FROM kpi_snapshot WHERE id = 1")).mappings().one_or_none()
+        if snap is not None:
+            active_days = int(snap["active_days"]) or 1
+            total_sessions = int(snap["total_sessions"])
+            return KpiResponse(
+                total_records=int(snap["total_records"]),
+                total_subscribers=int(snap["total_subscribers"]),
+                total_packages=int(snap["total_packages"]),
+                total_sessions=total_sessions,
+                total_upload_gb=round(float(snap["total_upload_gb"]), 4),
+                total_download_gb=round(float(snap["total_download_gb"]), 4),
+                total_usage_gb=round(float(snap["total_usage_gb"]), 4),
+                average_risk=round(float(snap["average_risk"]), 2),
+                maximum_risk=round(float(snap["maximum_risk"]), 2),
+                active_days=int(snap["active_days"]),
+                sessions_per_day=round(total_sessions / active_days, 2),
+                block_count=int(snap["block_count"] or 0),
+                review_count=int(snap["review_count"] or 0),
+                allow_count=int(snap["allow_count"] or 0),
+            )
+
     params = {"date_from": date_from, "date_to": date_to}
 
     sql = text(f"""
@@ -52,10 +80,14 @@ def get_kpis(
         WHERE {_DATE_RANGE_SQL}
     """)
     packages_sql = text(f"""
-        SELECT COUNT(DISTINCT single_offer) AS total_packages
-        FROM subscribers_daily,
-             LATERAL unnest(string_to_array(offer_name, ', ')) AS single_offer
-        WHERE offer_name IS NOT NULL AND offer_name <> '' AND {_DATE_RANGE_SQL}
+        WITH distinct_offers AS (
+            SELECT DISTINCT offer_name
+            FROM subscribers_daily
+            WHERE offer_name IS NOT NULL AND offer_name <> '' AND {_DATE_RANGE_SQL}
+        )
+        SELECT COUNT(DISTINCT t.single_offer) AS total_packages
+        FROM distinct_offers d
+        JOIN offer_name_tokens t ON t.offer_name = d.offer_name
     """)
 
     with get_session() as session:
@@ -168,9 +200,43 @@ def _window_summary(session, label: str, date_from: date_type, date_to: date_typ
     )
 
 
+def _window_from_snapshot(row, label: str) -> WindowSummary:
+    return WindowSummary(
+        label=label,
+        date_from=row["date_from"],
+        date_to=row["date_to"],
+        days_with_data=int(row["days_with_data"]),
+        total_subscribers=int(row["total_subscribers"]),
+        total_sessions=int(row["total_sessions"]),
+        average_risk=round(float(row["average_risk"]), 2),
+        maximum_risk=round(float(row["maximum_risk"]), 2),
+        total_usage_gb=round(float(row["total_usage_gb"]), 4),
+        block_count=int(row["block_count"] or 0),
+        review_count=int(row["review_count"] or 0),
+    )
+
+
 @router.get("/analytics/windows", response_model=AnalyticsWindowsResponse)
 def get_analytics_windows() -> AnalyticsWindowsResponse:
+    # Precomputed by app.ingest_core.refresh_window_snapshots at ingest
+    # time (see sql/migration_004_subscriber_dashboard_cache.sql) -- these
+    # windows, relative to MAX(session_date), can cover nearly the whole
+    # table when real data is clustered in a short span, making the live
+    # COUNT(DISTINCT subscriber_id) version too slow at 4.5M+ rows.
     with get_session() as session:
+        snap_rows = session.execute(text("SELECT * FROM window_snapshot")).mappings().all()
+        by_label = {r["label"]: r for r in snap_rows}
+
+        if "last_7_days" in by_label and "last_30_days" in by_label:
+            last_7_row = by_label["last_7_days"]
+            return AnalyticsWindowsResponse(
+                as_of_date=last_7_row["as_of_date"],
+                last_7_days=_window_from_snapshot(last_7_row, "Last 7 days"),
+                last_30_days=_window_from_snapshot(by_label["last_30_days"], "Last 30 days"),
+            )
+
+        # Fallback (snapshot not yet built, e.g. right after migration):
+        # compute live, same as before.
         latest = session.execute(text("SELECT MAX(session_date) FROM subscribers_daily")).scalar_one()
         if latest is None:
             today = date_type.today()
@@ -188,21 +254,21 @@ def get_analytics_windows() -> AnalyticsWindowsResponse:
 
 @router.get("/analytics/risk-distribution", response_model=list[RiskBand])
 def get_risk_distribution() -> list[RiskBand]:
+    # subscriber_summary.max_risk_score_0_100 is precomputed by
+    # app.ingest_core.refresh_subscriber_summary (see
+    # sql/migration_004_subscriber_dashboard_cache.sql), so this bands
+    # ~600k precomputed per-subscriber maxes instead of running
+    # MAX(...) GROUP BY over the full 4.5M+ row table.
     sql = text("""
-        WITH per_subscriber AS (
-            SELECT subscriber_id, MAX(risk_score_0_100) AS max_risk
-            FROM subscribers_daily
-            GROUP BY subscriber_id
-        ),
-        banded AS (
+        WITH banded AS (
             SELECT
                 CASE
-                    WHEN max_risk >= 90 THEN '90-100'
-                    ELSE LPAD((FLOOR(max_risk / 10) * 10)::text, 2, '0')
-                         || '-' || (FLOOR(max_risk / 10) * 10 + 9)::text
+                    WHEN max_risk_score_0_100 >= 90 THEN '90-100'
+                    ELSE LPAD((FLOOR(max_risk_score_0_100 / 10) * 10)::text, 2, '0')
+                         || '-' || (FLOOR(max_risk_score_0_100 / 10) * 10 + 9)::text
                 END AS label,
-                FLOOR(LEAST(max_risk, 99) / 10) AS band_order
-            FROM per_subscriber
+                FLOOR(LEAST(max_risk_score_0_100, 99) / 10) AS band_order
+            FROM subscriber_summary
         )
         SELECT label, band_order, COUNT(*) AS count
         FROM banded
@@ -218,27 +284,25 @@ def get_risk_distribution() -> list[RiskBand]:
 
 @router.get("/analytics/packages", response_model=PackageStatsResponse)
 def get_package_stats() -> PackageStatsResponse:
-    distribution_sql = text("""
-        SELECT single_offer AS name, COUNT(DISTINCT subscriber_id) AS count
-        FROM subscribers_daily,
-             LATERAL unnest(string_to_array(offer_name, ', ')) AS single_offer
-        WHERE offer_name IS NOT NULL AND offer_name <> ''
-        GROUP BY single_offer
-        ORDER BY count DESC
-    """)
-    usage_sql = text("""
-        SELECT single_offer AS name, SUM(daily_usage_gb / NULLIF(offer_count, 0)) AS usage_gb
-        FROM subscribers_daily,
-             LATERAL unnest(string_to_array(offer_name, ', ')) AS single_offer
-        WHERE offer_name IS NOT NULL AND offer_name <> ''
-        GROUP BY single_offer
-        ORDER BY usage_gb DESC
-    """)
+    # Precomputed by app.ingest_core.refresh_offer_catalog at ingest time
+    # (see sql/migration_002_offer_catalog.sql) -- COUNT(DISTINCT
+    # subscriber_id) GROUP BY offer is too expensive to run per-request
+    # at this row count, and this endpoint has no date filter to narrow
+    # it with anyway.
+    stats_sql = text("SELECT single_offer, subscriber_count, usage_gb FROM offer_stats")
 
     with get_session() as session:
-        dist_rows = session.execute(distribution_sql).mappings().all()
-        usage_rows = session.execute(usage_sql).mappings().all()
-        total_subscribers = session.execute(text("SELECT COUNT(DISTINCT subscriber_id) FROM subscribers_daily")).scalar_one()
+        stats_rows = session.execute(stats_sql).mappings().all()
+        total_subscribers = session.execute(text("SELECT total_subscribers FROM kpi_snapshot WHERE id = 1")).scalar_one()
+
+    dist_rows = sorted(
+        [{"name": r["single_offer"], "count": r["subscriber_count"]} for r in stats_rows],
+        key=lambda r: r["count"], reverse=True,
+    )
+    usage_rows = sorted(
+        [{"name": r["single_offer"], "usage_gb": r["usage_gb"]} for r in stats_rows if r["usage_gb"] is not None],
+        key=lambda r: r["usage_gb"], reverse=True,
+    )
 
     total_usage = sum(float(r["usage_gb"] or 0) for r in usage_rows) or 1
 
@@ -274,23 +338,39 @@ def get_rule_statistics(
     rule_ids = [r for r in cfg if r.startswith("rule_")]
     params = {"date_from": date_from, "date_to": date_to}
 
-    totals_sql = text(f"""
-        SELECT
-            COUNT(*) AS total_rows,
-            SUM(CASE WHEN decision = 'BLOCK' THEN 1 ELSE 0 END)  AS block_count,
-            SUM(CASE WHEN decision = 'REVIEW' THEN 1 ELSE 0 END) AS review_count,
-            SUM(CASE WHEN decision = 'ALLOW' THEN 1 ELSE 0 END)  AS allow_count
-        FROM subscribers_daily
-        WHERE {_DATE_RANGE_SQL}
-    """)
-
     with get_session() as session:
-        totals = session.execute(totals_sql, params).mappings().one()
-        total_rows = int(totals["total_rows"] or 0)
+        # The unfiltered case (dashboard default) reads the precomputed
+        # kpi_snapshot instead of re-running this full-table scan -- same
+        # values, already computed by app.ingest_core.refresh_kpi_snapshot.
+        if date_from is None and date_to is None:
+            snap = session.execute(
+                text("SELECT total_records, block_count, review_count, allow_count FROM kpi_snapshot WHERE id = 1")
+            ).mappings().one_or_none()
+        else:
+            snap = None
+
+        if snap is not None:
+            totals = snap
+            total_rows = int(snap["total_records"])
+        else:
+            totals_sql = text(f"""
+                SELECT
+                    COUNT(*) AS total_rows,
+                    SUM(CASE WHEN decision = 'BLOCK' THEN 1 ELSE 0 END)  AS block_count,
+                    SUM(CASE WHEN decision = 'REVIEW' THEN 1 ELSE 0 END) AS review_count,
+                    SUM(CASE WHEN decision = 'ALLOW' THEN 1 ELSE 0 END)  AS allow_count
+                FROM subscribers_daily
+                WHERE {_DATE_RANGE_SQL}
+            """)
+            totals = session.execute(totals_sql, params).mappings().one()
+            total_rows = int(totals["total_rows"] or 0)
 
         rule_stats = []
         for rule_id in rule_ids:
             rule = cfg[rule_id]
+            # Sped up by idx_subscribers_daily_triggered_rules_trgm
+            # (sql/migration_004_subscriber_dashboard_cache.sql) --
+            # previously an unindexed LIKE '%...%' scan of the full table.
             count_sql = text(f"""
                 SELECT COUNT(*) FROM subscribers_daily
                 WHERE {_DATE_RANGE_SQL} AND triggered_rules LIKE :pattern

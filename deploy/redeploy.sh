@@ -42,10 +42,10 @@ for key in ('taskDefinitionArn','revision','status','requiresAttributes','compat
     td.pop(key, None)
 print(json.dumps(td))
 ")
-TASKDEF_FILE="$REPO_ROOT/deploy/.tmp_taskdef.json"
-echo "$NEW_TASKDEF" > "$TASKDEF_FILE"
-NEW_TASKDEF_ARN=$(aws ecs register-task-definition --cli-input-json "file://$TASKDEF_FILE" --query 'taskDefinition.taskDefinitionArn' --output text)
-rm -f "$TASKDEF_FILE"
+# Passed as an inline JSON string rather than --cli-input-json file://...
+# -- on Git Bash for Windows, the aws.exe (native Windows binary) can't
+# resolve a POSIX-style file:// path (e.g. file:///c/Users/...).
+NEW_TASKDEF_ARN=$(aws ecs register-task-definition --cli-input-json "$NEW_TASKDEF" --query 'taskDefinition.taskDefinitionArn' --output text)
 echo "New task definition: $NEW_TASKDEF_ARN"
 
 echo "=== Updating ECS service ==="
