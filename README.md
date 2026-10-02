@@ -1,4 +1,4 @@
-# PCRF Fraud Risk Dashboard -- merged with Broadband FMS
+# FraudVision AI (formerly PCRF Fraud Risk Dashboard) -- merged with Broadband FMS
 
 This is the merged system: PCRF's RDS Postgres data store and real
 615k+ row model stayed as the source of truth; Broadband FMS's

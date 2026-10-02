@@ -10,6 +10,8 @@ import { SubscribersPage } from '@/pages/SubscribersPage';
 import { RiskAnalyticsPage } from '@/pages/RiskAnalyticsPage';
 import { SystemHealthPage } from '@/pages/SystemHealthPage';
 import { DemaskPage } from '@/pages/DemaskPage';
+import { LoginPage } from '@/pages/LoginPage';
+import { AuthProvider, RequireAuth } from '@/auth/AuthContext';
 
 const theme = createTheme({
   palette: {
@@ -33,17 +35,27 @@ export default function App() {
         <CssBaseline />
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Navigate to="/dashboard" replace />} />
-              <Route path="/dashboard" element={<MainLayout />}>
-                <Route index element={<ExecutiveSummaryPage />} />
-                <Route path="subscribers" element={<SubscribersPage />} />
-                <Route path="risk" element={<RiskAnalyticsPage />} />
-                <Route path="health" element={<SystemHealthPage />} />
-                <Route path="demask" element={<DemaskPage />} />
-              </Route>
-              <Route path="*" element={<Navigate to="/dashboard" replace />} />
-            </Routes>
+            <AuthProvider>
+              <Routes>
+                <Route path="/" element={<Navigate to="/dashboard" replace />} />
+                <Route path="/login" element={<LoginPage />} />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <RequireAuth>
+                      <MainLayout />
+                    </RequireAuth>
+                  }
+                >
+                  <Route index element={<ExecutiveSummaryPage />} />
+                  <Route path="subscribers" element={<SubscribersPage />} />
+                  <Route path="risk" element={<RiskAnalyticsPage />} />
+                  <Route path="health" element={<SystemHealthPage />} />
+                  <Route path="demask" element={<DemaskPage />} />
+                </Route>
+                <Route path="*" element={<Navigate to="/dashboard" replace />} />
+              </Routes>
+            </AuthProvider>
           </BrowserRouter>
         </LocalizationProvider>
       </ThemeProvider>

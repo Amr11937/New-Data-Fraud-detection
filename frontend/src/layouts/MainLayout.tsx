@@ -2,6 +2,7 @@ import { NavLink, Outlet } from 'react-router-dom';
 import {
   AppBar,
   Box,
+  Button,
   Chip,
   Drawer,
   List,
@@ -16,6 +17,10 @@ import PeopleIcon from '@mui/icons-material/People';
 import InsightsIcon from '@mui/icons-material/Insights';
 import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
 import LockResetIcon from '@mui/icons-material/LockReset';
+import PersonIcon from '@mui/icons-material/Person';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { useAuth } from '@/auth/AuthContext';
+import logoMark from '@/assets/logo-mark.png';
 import { useWebSocket } from '@/hooks/useWebSocket';
 import { AlertBanner } from '@/components/AlertBanner';
 
@@ -31,13 +36,20 @@ const NAV_ITEMS = [
 
 export default function MainLayout() {
   const { isConnected } = useWebSocket();
+  const { user, logout } = useAuth();
 
   return (
     <Box sx={{ display: 'flex' }}>
       <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
         <Toolbar sx={{ gap: 2 }}>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
-            PCRF Fraud Risk Dashboard
+          <Box
+            component="img"
+            src={logoMark}
+            alt="FraudVision AI logo"
+            sx={{ height: 50, width: 'auto', display: 'block' }}
+          />
+          <Typography variant="h6" sx={{ flexGrow: 1, fontWeight: 700 }}>
+            FraudVision AI
           </Typography>
           <Chip
             label={isConnected ? 'Live' : 'Reconnecting…'}
@@ -45,6 +57,10 @@ export default function MainLayout() {
             size="small"
             variant="outlined"
           />
+          <Chip icon={<PersonIcon />} label={user} size="small" variant="outlined" />
+          <Button color="inherit" size="small" startIcon={<LogoutIcon />} onClick={logout}>
+            Sign out
+          </Button>
         </Toolbar>
       </AppBar>
 

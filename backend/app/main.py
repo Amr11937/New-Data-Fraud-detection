@@ -42,7 +42,7 @@ async def lifespan(app: FastAPI):
     logger.info("Shutdown complete.")
 
 
-app = FastAPI(title="PCRF Fraud Risk API (merged)", version="2.0.0", lifespan=lifespan)
+app = FastAPI(title="FraudVision AI API", version="2.0.0", lifespan=lifespan)
 
 allowed_origins = [
     origin.strip()

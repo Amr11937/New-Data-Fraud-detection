@@ -18,6 +18,7 @@ class FmsWebSocket {
 
   connect(): void {
     if (this.ws && this.ws.readyState === WebSocket.OPEN) return;
+    this.shouldReconnect = true; // re-arm after a disconnect() on sign-out
 
     const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
     const host = window.location.host;

@@ -65,8 +65,11 @@ definition revision, and forces a new ECS deployment.
    HTTP->HTTPS, and update `/pcrf-fms/ALLOWED_ORIGINS` in SSM to the
    `https://` URL.
 
-2. **The app has zero authentication, and it's open to the entire
-   internet.** This was an explicit, discussed decision to move fast,
+2. **The app has no real authentication, and it's open to the entire
+   internet.** The FraudVision AI login page is a front-end-only UI
+   gate (any username/password is accepted; see
+   `frontend/src/auth/AuthContext.tsx`) -- it does not protect the API.
+   This was an explicit, discussed decision to move fast,
    not an oversight -- the ALB security group (`pcrf-fms-alb-sg`)
    allows `0.0.0.0/0` on 80/443, and there is no login anywhere in
    `backend/app` or `frontend/src`. The Demask page can reverse real
