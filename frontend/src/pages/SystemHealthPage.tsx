@@ -12,7 +12,7 @@ export function SystemHealthPage() {
       </Typography>
 
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={4}>
           <Card variant="outlined">
             <CardContent>
               <Typography variant="body2" color="text.secondary">
@@ -26,7 +26,7 @@ export function SystemHealthPage() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={4}>
           <Card variant="outlined">
             <CardContent>
               <Typography variant="body2" color="text.secondary">
@@ -38,19 +38,7 @@ export function SystemHealthPage() {
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card variant="outlined">
-            <CardContent>
-              <Typography variant="body2" color="text.secondary">
-                Active WebSocket connections
-              </Typography>
-              <Typography variant="h6" sx={{ mt: 1 }}>
-                {data?.websocket_connections ?? '—'}
-              </Typography>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
+        <Grid item xs={12} sm={6} md={4}>
           <Card variant="outlined">
             <CardContent>
               <Typography variant="body2" color="text.secondary">

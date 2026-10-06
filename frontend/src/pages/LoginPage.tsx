@@ -16,7 +16,7 @@ import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import RadarIcon from '@mui/icons-material/Radar';
+import AssessmentIcon from '@mui/icons-material/Assessment';
 import BoltIcon from '@mui/icons-material/Bolt';
 import PsychologyIcon from '@mui/icons-material/Psychology';
 import { useAuth } from '@/auth/AuthContext';
@@ -36,9 +36,9 @@ const rise = keyframes`
 `;
 
 const FEATURES = [
-  { icon: <RadarIcon />, title: 'Real-time detection', text: 'Live fraud alerts streamed as subscriber sessions are scored.' },
-  { icon: <PsychologyIcon />, title: 'Ensemble AI scoring', text: 'Isolation Forest plus calibrated rules, explained per subscriber.' },
-  { icon: <BoltIcon />, title: 'Act in seconds', text: 'Triage high-risk accounts and export evidence in a click.' },
+  { icon: <AssessmentIcon />, title: 'Daily fraud analysis', text: 'Every subscriber usage record is scored and ranked each day.' },
+  { icon: <PsychologyIcon />, title: 'Smart risk scoring', text: 'Every subscriber gets a clear risk score, with the reasons behind it.' },
+  { icon: <BoltIcon />, title: 'Act on what matters', text: 'Triage high-risk accounts and export evidence in a click.' },
 ];
 
 function LogoCard({ width }: { width: number }) {
@@ -170,7 +170,7 @@ export function LoginPage() {
             See fraud before it costs you.
           </Typography>
           <Typography sx={{ color: 'rgba(226,232,240,0.72)', fontSize: 17, mb: 5 }}>
-            AI-driven risk intelligence for telecom subscribers, built for fraud analysts who need answers now.
+            AI-driven risk intelligence for telecom subscribers, built for fraud analysts who need clear answers.
           </Typography>
           <Stack spacing={2.5}>
             {FEATURES.map((f, i) => (

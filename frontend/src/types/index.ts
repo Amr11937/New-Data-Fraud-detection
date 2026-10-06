@@ -203,24 +203,6 @@ export interface ScoreResponse {
 }
 
 // ---------------------------------------------------------------------------
-// WebSocket events -- mirror app/routers/ws.py + ingest_worker.py alerts
-// ---------------------------------------------------------------------------
-
-export type WsEventType = 'connected' | 'fraud_event';
-
-export interface WsEvent {
-  type: WsEventType;
-  timestamp?: string;
-  connections?: number;
-  subscriber_id?: string;
-  account_num?: string | null;
-  session_date?: string;
-  decision?: Decision;
-  final_score?: number;
-  triggered_rules?: string;
-}
-
-// ---------------------------------------------------------------------------
 // Global filter state
 // ---------------------------------------------------------------------------
 

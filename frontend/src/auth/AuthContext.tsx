@@ -5,7 +5,6 @@
  */
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import { fmsWs } from '@/services/websocket';
 
 const STORAGE_KEY = 'fraudvision:user';
 
@@ -46,7 +45,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch {
       // ignore
     }
-    fmsWs.disconnect();
     setUser(null);
   }, []);
 
