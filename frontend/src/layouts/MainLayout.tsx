@@ -37,7 +37,17 @@ export default function MainLayout() {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+      <AppBar
+        position="fixed"
+        elevation={0}
+        sx={{
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+          bgcolor: 'background.paper',
+          color: 'primary.dark',
+          borderBottom: '3px solid',
+          borderColor: 'secondary.main',
+        }}
+      >
         <Toolbar sx={{ gap: 2 }}>
           <Box
             component="img"
@@ -71,7 +81,7 @@ export default function MainLayout() {
               component={NavLink}
               to={item.to}
               end={item.end}
-              sx={{ '&.active': { bgcolor: 'action.selected' } }}
+              sx={{ '&.active': { bgcolor: 'rgba(0,114,188,0.10)', color: 'primary.dark', borderLeft: '4px solid', borderColor: 'secondary.main' } }}
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.label} />

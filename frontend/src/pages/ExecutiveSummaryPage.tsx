@@ -3,7 +3,7 @@ import { Card, CardContent, Grid, Stack, Typography } from '@mui/material';
 import ReactECharts from 'echarts-for-react';
 import { DateRangeFilter } from '@/components/DateRangeFilter';
 import { KpiCard } from '@/components/KpiCard';
-import { useAnalyticsWindows, useDailyTrend, useKpis, useRiskDistribution } from '@/hooks/useDashboard';
+import { useAnalyticsWindows, useDailyTrend, useKpis } from '@/hooks/useDashboard';
 import type { DateRange } from '@/types';
 
 export function ExecutiveSummaryPage() {
@@ -12,7 +12,6 @@ export function ExecutiveSummaryPage() {
   const { data: kpis } = useKpis(range);
   const { data: daily } = useDailyTrend(range);
   const { data: windows } = useAnalyticsWindows();
-  const { data: riskDist } = useRiskDistribution();
 
   const trendOption = {
     tooltip: { trigger: 'axis' },
@@ -25,11 +24,22 @@ export function ExecutiveSummaryPage() {
     ],
   };
 
-  const riskOption = {
+  const decisionOption = {
+    color: ['#4F9F2F', '#F59E0B', '#D32F2F'],
     tooltip: { trigger: 'axis' },
-    xAxis: { type: 'category', data: riskDist?.map((r) => r.label) ?? [] },
-    yAxis: { type: 'value' },
-    series: [{ type: 'bar', data: riskDist?.map((r) => r.count) ?? [], name: 'Subscribers' }],
+    legend: { data: ['Allow', 'Review', 'Block'] },
+    grid: { left: 60, right: 24, top: 40, bottom: 40 },
+    xAxis: { type: 'category', data: daily?.map((d) => d.date) ?? [] },
+    yAxis: { type: 'value', name: 'Subscribers' },
+    series: [
+      {
+        name: 'Allow',
+        type: 'line',
+        data: daily?.map((d) => d.total_sessions - d.block_count - d.review_count) ?? [],
+      },
+      { name: 'Review', type: 'line', data: daily?.map((d) => d.review_count) ?? [] },
+      { name: 'Block', type: 'line', data: daily?.map((d) => d.block_count) ?? [] },
+    ],
   };
 
   return (
@@ -37,24 +47,17 @@ export function ExecutiveSummaryPage() {
       <DateRangeFilter value={range} onChange={setRange} />
 
       <Grid container spacing={2}>
-        <Grid item xs={12} sm={6} md={4} lg={2.4}>
+        <Grid item xs={12} sm={6} md={3}>
           <KpiCard label="Total records" value={kpis?.total_records?.toLocaleString() ?? '—'} />
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={2.4}>
+        <Grid item xs={12} sm={6} md={3}>
           <KpiCard label="Total subscribers" value={kpis?.total_subscribers ?? '—'} />
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={2.4}>
+        <Grid item xs={12} sm={6} md={3}>
           <KpiCard label="Total sessions" value={kpis?.total_sessions?.toLocaleString() ?? '—'} />
         </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={2.4}>
+        <Grid item xs={12} sm={6} md={3}>
           <KpiCard label="Average risk" value={kpis?.average_risk?.toFixed(1) ?? '—'} />
-        </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={2.4}>
-          <KpiCard
-            label="Block / Review"
-            value={`${kpis?.block_count ?? 0} / ${kpis?.review_count ?? 0}`}
-            subtext={`of ${kpis?.total_sessions ?? 0} rows`}
-          />
         </Grid>
       </Grid>
 
@@ -99,9 +102,9 @@ export function ExecutiveSummaryPage() {
       <Card variant="outlined">
         <CardContent>
           <Typography variant="subtitle2" gutterBottom>
-            Subscribers by risk band (per-subscriber max score)
+            Decisions by day (allow / review / block subscribers)
           </Typography>
-          <ReactECharts option={riskOption} style={{ height: 280 }} notMerge />
+          <ReactECharts option={decisionOption} style={{ height: 320 }} notMerge />
         </CardContent>
       </Card>
     </Stack>

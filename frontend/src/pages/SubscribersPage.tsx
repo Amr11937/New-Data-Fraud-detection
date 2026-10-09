@@ -1,8 +1,12 @@
 import { useMemo, useState } from 'react';
+import ReactECharts from 'echarts-for-react';
 import {
   AppBar,
   Box,
   Button,
+  Card,
+  CardContent,
+  Chip,
   Container,
   Dialog,
   Grid,
@@ -55,6 +59,8 @@ export function SubscribersPage() {
   const [range, setRange] = useState<DateRange>({ dateFrom: null, dateTo: null });
   const [search, setSearch] = useState('');
   const [decision, setDecision] = useState('');
+  const [minRisk, setMinRisk] = useState('');
+  const [maxRisk, setMaxRisk] = useState('');
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
   const [selected, setSelected] = useState<string | null>(null);
@@ -64,6 +70,8 @@ export function SubscribersPage() {
     dateTo: range.dateTo,
     search: search || undefined,
     decision: decision || undefined,
+    minRisk: minRisk === '' ? undefined : Number(minRisk),
+    maxRisk: maxRisk === '' ? undefined : Number(maxRisk),
     page: page + 1,
     pageSize,
   });
@@ -84,6 +92,24 @@ export function SubscribersPage() {
   };
 
   const historyChartData = useMemo(() => detail?.history ?? [], [detail]);
+
+  const historyOption = {
+    color: ['#0072BC'],
+    tooltip: { trigger: 'axis' },
+    grid: { left: 50, right: 24, top: 30, bottom: 40 },
+    xAxis: { type: 'category', data: historyChartData.map((h) => h.session_date) },
+    yAxis: { type: 'value', name: 'Risk score', min: 0, max: 100 },
+    series: [
+      {
+        name: 'Risk score',
+        type: 'line',
+        smooth: true,
+        symbolSize: 8,
+        areaStyle: { opacity: 0.12 },
+        data: historyChartData.map((h) => Number(h.risk_score_0_100.toFixed(2))),
+      },
+    ],
+  };
 
   return (
     <Stack spacing={2}>
@@ -108,6 +134,30 @@ export function SubscribersPage() {
           <MenuItem value="REVIEW">Review</MenuItem>
           <MenuItem value="BLOCK">Block</MenuItem>
         </TextField>
+        <TextField
+          label="Min risk score"
+          size="small"
+          type="number"
+          value={minRisk}
+          onChange={(e) => {
+            setMinRisk(e.target.value);
+            setPage(0);
+          }}
+          inputProps={{ min: 0, max: 100, step: 1 }}
+          sx={{ width: 130 }}
+        />
+        <TextField
+          label="Max risk score"
+          size="small"
+          type="number"
+          value={maxRisk}
+          onChange={(e) => {
+            setMaxRisk(e.target.value);
+            setPage(0);
+          }}
+          inputProps={{ min: 0, max: 100, step: 1 }}
+          sx={{ width: 130 }}
+        />
         <Box sx={{ flexGrow: 1 }} />
         <Button startIcon={<DownloadIcon />} onClick={handleExportCsv} disabled={!data?.items.length}>
           Export CSV
@@ -237,7 +287,6 @@ export function SubscribersPage() {
                   },
                   { label: 'Input', value: `${(detail.total_input_gb ?? 0).toFixed(2)} GB` },
                   { label: 'Output', value: `${(detail.total_output_gb ?? 0).toFixed(2)} GB` },
-                  { label: 'Offer encoding', value: detail.offer_name ?? '—' },
                   { label: 'Available history days', value: detail.history_days },
                   { label: 'Total source records', value: '—' },
                   { label: 'Risk level', value: detail.risk_level },
@@ -248,31 +297,32 @@ export function SubscribersPage() {
                 ))}
               </Grid>
 
-              <Typography variant="subtitle2" sx={{ mt: 2 }}>
-                Score history ({historyChartData.length} days)
-              </Typography>
-              <TableContainer sx={{ maxHeight: 420 }}>
-                <Table size="small" stickyHeader>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell>Date</TableCell>
-                      <TableCell align="right">Risk</TableCell>
-                      <TableCell>Decision</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {historyChartData.map((h) => (
-                      <TableRow key={h.session_date}>
-                        <TableCell>{h.session_date}</TableCell>
-                        <TableCell align="right">{h.risk_score_0_100.toFixed(1)}</TableCell>
-                        <TableCell>
-                          <DecisionBadge decision={h.decision} />
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+              <Card variant="outlined">
+                <CardContent>
+                  <Typography variant="body2" color="text.secondary" gutterBottom>
+                    OFFER / PACKAGES
+                  </Typography>
+                  <Stack direction="row" flexWrap="wrap" useFlexGap spacing={1}>
+                    {(detail.offer_name ?? '')
+                      .split(',')
+                      .map((p) => p.trim())
+                      .filter(Boolean)
+                      .map((p) => (
+                        <Chip key={p} label={p} variant="outlined" color="primary" sx={{ height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 } }} />
+                      ))}
+                    {!detail.offer_name && <Typography>—</Typography>}
+                  </Stack>
+                </CardContent>
+              </Card>
+
+              <Card variant="outlined">
+                <CardContent>
+                  <Typography variant="subtitle2" gutterBottom>
+                    Risk score by day ({historyChartData.length} days)
+                  </Typography>
+                  <ReactECharts option={historyOption} style={{ height: 320 }} notMerge />
+                </CardContent>
+              </Card>
             </Stack>
           )}
         </Container>

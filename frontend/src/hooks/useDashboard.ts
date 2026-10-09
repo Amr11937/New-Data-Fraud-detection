@@ -64,6 +64,8 @@ export function useSubscribers(params: {
   dateTo?: string | null;
   search?: string;
   decision?: string;
+  minRisk?: number;
+  maxRisk?: number;
   page: number;
   pageSize: number;
 }) {

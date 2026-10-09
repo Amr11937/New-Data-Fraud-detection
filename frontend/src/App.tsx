@@ -15,10 +15,15 @@ import { AuthProvider, RequireAuth } from '@/auth/AuthContext';
 
 const theme = createTheme({
   palette: {
-    mode: 'dark',
-    background: { default: '#060D1A', paper: '#0F172A' },
-    primary: { main: '#2563EB' },
-    secondary: { main: '#7C3AED' },
+    mode: 'light',
+    background: { default: '#F2F6FB', paper: '#FFFFFF' },
+    primary: { main: '#0072BC', dark: '#004F8C', light: '#3D9BDB', contrastText: '#FFFFFF' },
+    secondary: { main: '#6CB33F', dark: '#4F9226', contrastText: '#FFFFFF' },
+    success: { main: '#4F9F2F' },
+    warning: { main: '#F59E0B' },
+    error: { main: '#D32F2F' },
+    text: { primary: '#1B2A3B', secondary: '#5B6B7D' },
+    divider: '#DCE5EF',
   },
   typography: { fontFamily: '"Inter", "Roboto", "Helvetica", "Arial", sans-serif' },
   shape: { borderRadius: 8 },
