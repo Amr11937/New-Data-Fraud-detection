@@ -90,6 +90,8 @@ class SubscriberDetailPoint(BaseModel):
     session_date: date
     total_input_gb: Optional[float]
     total_output_gb: Optional[float]
+    total_duration_minutes: Optional[float] = None
+    offer_name: Optional[str] = None
     risk_score_0_100: float
     final_score: Optional[float]
     decision: Optional[str]

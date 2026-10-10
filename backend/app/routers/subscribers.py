@@ -167,6 +167,8 @@ def get_subscriber_detail(subscriber_id: str) -> SubscriberDetail:
                 session_date=r["session_date"],
                 total_input_gb=r["total_input_gb"],
                 total_output_gb=r["total_output_gb"],
+                total_duration_minutes=r["total_duration_minutes"],
+                offer_name=r["offer_name"],
                 risk_score_0_100=r["risk_score_0_100"],
                 final_score=r["final_score"],
                 decision=r["decision"],

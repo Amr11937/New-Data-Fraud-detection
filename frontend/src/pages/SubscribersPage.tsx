@@ -93,6 +93,21 @@ export function SubscribersPage() {
 
   const historyChartData = useMemo(() => detail?.history ?? [], [detail]);
 
+  const durationOption = {
+    color: ['#6CB33F'],
+    tooltip: { trigger: 'axis' },
+    grid: { left: 70, right: 24, top: 30, bottom: 40 },
+    xAxis: { type: 'category', data: historyChartData.map((h) => h.session_date) },
+    yAxis: { type: 'value', name: 'Minutes' },
+    series: [
+      {
+        name: 'Duration (min)',
+        type: 'bar',
+        data: historyChartData.map((h) => Number((h.total_duration_minutes ?? 0).toFixed(2))),
+      },
+    ],
+  };
+
   const historyOption = {
     color: ['#0072BC'],
     tooltip: { trigger: 'axis' },
@@ -278,15 +293,11 @@ export function SubscribersPage() {
                   { label: 'Daily usage', value: `${detail.daily_usage_gb.toFixed(2)} GB` },
                   { label: 'Avg session usage', value: `${(detail.average_session_usage_gb ?? 0).toFixed(2)} GB` },
                   {
-                    label: 'Duration',
-                    value: `${(detail.total_duration_minutes ?? 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} min`,
-                  },
-                  {
                     label: 'Avg session duration',
                     value: `${(detail.average_session_duration_minutes ?? 0).toFixed(2)} min`,
                   },
-                  { label: 'Input', value: `${(detail.total_input_gb ?? 0).toFixed(2)} GB` },
-                  { label: 'Output', value: `${(detail.total_output_gb ?? 0).toFixed(2)} GB` },
+                  { label: 'Download', value: `${(detail.total_input_gb ?? 0).toFixed(2)} GB` },
+                  { label: 'Upload', value: `${(detail.total_output_gb ?? 0).toFixed(2)} GB` },
                   { label: 'Available history days', value: detail.history_days },
                   { label: 'Total source records', value: '—' },
                   { label: 'Risk level', value: detail.risk_level },
@@ -299,18 +310,27 @@ export function SubscribersPage() {
 
               <Card variant="outlined">
                 <CardContent>
-                  <Typography variant="body2" color="text.secondary" gutterBottom>
-                    OFFER / PACKAGES
+                  <Typography variant="subtitle2" gutterBottom>
+                    Offer / packages by date
                   </Typography>
-                  <Stack direction="row" flexWrap="wrap" useFlexGap spacing={1}>
-                    {(detail.offer_name ?? '')
-                      .split(',')
-                      .map((p) => p.trim())
-                      .filter(Boolean)
-                      .map((p) => (
-                        <Chip key={p} label={p} variant="outlined" color="primary" sx={{ height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 } }} />
-                      ))}
-                    {!detail.offer_name && <Typography>—</Typography>}
+                  <Stack spacing={1.5} sx={{ maxHeight: 360, overflowY: 'auto', pr: 1 }}>
+                    {historyChartData.map((h) => (
+                      <Stack key={h.session_date} direction={{ xs: 'column', sm: 'row' }} spacing={1.5} alignItems={{ sm: 'flex-start' }}>
+                        <Typography variant="body2" fontWeight={600} sx={{ minWidth: 100, pt: 0.5 }}>
+                          {h.session_date}
+                        </Typography>
+                        <Stack direction="row" flexWrap="wrap" useFlexGap spacing={1}>
+                          {(h.offer_name ?? '')
+                            .split(',')
+                            .map((p) => p.trim())
+                            .filter(Boolean)
+                            .map((p) => (
+                              <Chip key={p} label={p} size="small" variant="outlined" color="primary" sx={{ height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 } }} />
+                            ))}
+                          {!h.offer_name && <Typography variant="body2" color="text.secondary">—</Typography>}
+                        </Stack>
+                      </Stack>
+                    ))}
                   </Stack>
                 </CardContent>
               </Card>
@@ -321,6 +341,15 @@ export function SubscribersPage() {
                     Risk score by day ({historyChartData.length} days)
                   </Typography>
                   <ReactECharts option={historyOption} style={{ height: 320 }} notMerge />
+                </CardContent>
+              </Card>
+
+              <Card variant="outlined">
+                <CardContent>
+                  <Typography variant="subtitle2" gutterBottom>
+                    Duration by day (minutes)
+                  </Typography>
+                  <ReactECharts option={durationOption} style={{ height: 320 }} notMerge />
                 </CardContent>
               </Card>
             </Stack>

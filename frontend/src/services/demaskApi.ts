@@ -1,6 +1,6 @@
 /**
  * Axios calls for Demask (subscriber ID recovery). Split out from api.ts
- * because these are multipart/form-data uploads with CSV blob responses,
+ * because these are multipart/form-data uploads with parquet blob responses,
  * a different shape from the rest of api.ts's typed JSON endpoints.
  */
 import type { AxiosProgressEvent } from 'axios';
@@ -46,7 +46,7 @@ export const runMapping = async (
 
   return {
     blob: response.data,
-    filename: 'updated_subscribers.csv',
+    filename: 'updated_subscribers.parquet',
     stats: statsFromHeaders(response.headers as Record<string, unknown>),
   };
 };
@@ -72,7 +72,7 @@ export const runEncryption = async (
 
   return {
     blob: response.data,
-    filename: 'decrypted_subscribers.csv',
+    filename: 'decrypted_subscribers.parquet',
     stats: statsFromHeaders(response.headers as Record<string, unknown>),
   };
 };
