@@ -15,11 +15,11 @@ import {
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import PeopleIcon from '@mui/icons-material/People';
 import InsightsIcon from '@mui/icons-material/Insights';
-import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
 import LockResetIcon from '@mui/icons-material/LockReset';
 import PersonIcon from '@mui/icons-material/Person';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useAuth } from '@/auth/AuthContext';
+import { DateRangeProvider } from '@/context/DateRangeContext';
 import logoMark from '@/assets/logo-mark.png';
 
 const DRAWER_WIDTH = 220;
@@ -28,7 +28,6 @@ const NAV_ITEMS = [
   { to: '/dashboard', label: 'Executive summary', icon: <DashboardIcon />, end: true },
   { to: '/dashboard/subscribers', label: 'Subscribers', icon: <PeopleIcon /> },
   { to: '/dashboard/risk', label: 'Risk analytics', icon: <InsightsIcon /> },
-  { to: '/dashboard/health', label: 'System health', icon: <MonitorHeartIcon /> },
   { to: '/dashboard/demask', label: 'Demask', icon: <LockResetIcon /> },
 ];
 
@@ -92,7 +91,9 @@ export default function MainLayout() {
 
       <Box component="main" sx={{ flexGrow: 1, p: 3, width: `calc(100% - ${DRAWER_WIDTH}px)` }}>
         <Toolbar />
-        <Outlet />
+        <DateRangeProvider>
+          <Outlet />
+        </DateRangeProvider>
       </Box>
     </Box>
   );

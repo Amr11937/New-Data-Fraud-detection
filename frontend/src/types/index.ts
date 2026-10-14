@@ -147,6 +147,7 @@ export interface SubscriberDetailPoint {
   total_input_gb: number | null;
   total_output_gb: number | null;
   total_duration_minutes?: number | null;
+  sessions_per_day?: number | null;
   offer_name?: string | null;
   risk_score_0_100: number;
   final_score: number | null;

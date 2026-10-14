@@ -1,13 +1,12 @@
-import { useState } from 'react';
 import { Card, CardContent, Grid, Stack, Typography } from '@mui/material';
 import ReactECharts from 'echarts-for-react';
 import { DateRangeFilter } from '@/components/DateRangeFilter';
 import { KpiCard } from '@/components/KpiCard';
 import { useAnalyticsWindows, useDailyTrend, useKpis } from '@/hooks/useDashboard';
-import type { DateRange } from '@/types';
+import { useDateRange } from '@/context/DateRangeContext';
 
 export function ExecutiveSummaryPage() {
-  const [range, setRange] = useState<DateRange>({ dateFrom: null, dateTo: null });
+  const { range, setRange } = useDateRange();
 
   const { data: kpis } = useKpis(range);
   const { data: daily } = useDailyTrend(range);
@@ -51,7 +50,7 @@ export function ExecutiveSummaryPage() {
           <KpiCard label="Total records" value={kpis?.total_records?.toLocaleString() ?? '—'} />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
-          <KpiCard label="Total subscribers" value={kpis?.total_subscribers ?? '—'} />
+          <KpiCard label="Total unique subscribers" value={kpis?.total_subscribers ?? '—'} />
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <KpiCard label="Total sessions" value={kpis?.total_sessions?.toLocaleString() ?? '—'} />
@@ -70,7 +69,7 @@ export function ExecutiveSummaryPage() {
               </Typography>
               <Typography variant="h5">{windows?.last_7_days.total_subscribers ?? '—'} subscribers</Typography>
               <Typography variant="body2" color="text.secondary">
-                {windows?.last_7_days.block_count ?? 0} blocked · {windows?.last_7_days.review_count ?? 0} for review
+                {windows?.last_7_days.block_count ?? 0} for blocking · {windows?.last_7_days.review_count ?? 0} for review
               </Typography>
             </CardContent>
           </Card>
@@ -83,7 +82,7 @@ export function ExecutiveSummaryPage() {
               </Typography>
               <Typography variant="h5">{windows?.last_30_days.total_subscribers ?? '—'} subscribers</Typography>
               <Typography variant="body2" color="text.secondary">
-                {windows?.last_30_days.block_count ?? 0} blocked · {windows?.last_30_days.review_count ?? 0} for review
+                {windows?.last_30_days.block_count ?? 0} for blocking · {windows?.last_30_days.review_count ?? 0} for review
               </Typography>
             </CardContent>
           </Card>

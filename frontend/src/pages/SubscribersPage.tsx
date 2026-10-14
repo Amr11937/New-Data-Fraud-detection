@@ -36,7 +36,7 @@ import { DateRangeFilter } from '@/components/DateRangeFilter';
 import { DecisionBadge } from '@/components/DecisionBadge';
 import { useSubscriberDetail, useSubscribers } from '@/hooks/useDashboard';
 import { downloadPdfReport } from '@/services/api';
-import type { DateRange } from '@/types';
+import { useDateRange } from '@/context/DateRangeContext';
 
 const FullScreenTransition = forwardRef(function FullScreenTransition(
   props: TransitionProps & { children: ReactElement },
@@ -44,6 +44,36 @@ const FullScreenTransition = forwardRef(function FullScreenTransition(
 ) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+
+// Plain-language meaning of each rule (see backend/app/config/rules.yaml for the checks behind them).
+const RULE_DESCRIPTIONS: Record<string, string> = {
+  rule_01: 'Unusually high total data usage in a day.',
+  rule_02: 'Unusually high download volume in a day.',
+  rule_03: 'Unusually high upload volume in a day.',
+  rule_04: 'Unusually large average data usage per session.',
+  rule_05: 'Unusually high number of sessions in a day.',
+  rule_06: 'Too many different offers or packages used in a single day.',
+  rule_07: 'Download-to-upload ratio is unusually high.',
+};
+
+const RISK_LEVEL_COLORS: Record<string, string> = {
+  Critical: '#D32F2F',
+  High: '#F59E0B',
+  Medium: '#4F9F2F',
+  Low: '#4F9F2F',
+  Normal: '#4F9F2F',
+};
+
+// A package counts as high-risk for a subscriber when the subscriber's average risk score
+// on the days that package was active is in the High band (70+) or above.
+const HIGH_RISK_PACKAGE_SCORE = 70;
+
+function formatHoursMinutes(totalMinutes: number): string {
+  const rounded = Math.round(totalMinutes);
+  const h = Math.floor(rounded / 60);
+  const m = rounded % 60;
+  return `${h.toLocaleString()} h ${m} min`;
+}
 
 function toCsv(rows: Record<string, unknown>[]): string {
   if (rows.length === 0) return '';
@@ -56,7 +86,7 @@ function toCsv(rows: Record<string, unknown>[]): string {
 }
 
 export function SubscribersPage() {
-  const [range, setRange] = useState<DateRange>({ dateFrom: null, dateTo: null });
+  const { range, setRange } = useDateRange();
   const [search, setSearch] = useState('');
   const [decision, setDecision] = useState('');
   const [minRisk, setMinRisk] = useState('');
@@ -93,12 +123,64 @@ export function SubscribersPage() {
 
   const historyChartData = useMemo(() => detail?.history ?? [], [detail]);
 
+  const totalSessions = useMemo(
+    () => historyChartData.reduce((sum, h) => sum + (h.sessions_per_day ?? 0), 0),
+    [historyChartData]
+  );
+  const avgSessionsPerDay = historyChartData.length ? totalSessions / historyChartData.length : 0;
+
+  const highRiskPackages = useMemo(() => {
+    const stats = new Map<string, { sum: number; n: number }>();
+    for (const h of historyChartData) {
+      for (const p of (h.offer_name ?? '').split(',').map((x) => x.trim()).filter(Boolean)) {
+        const cur = stats.get(p) ?? { sum: 0, n: 0 };
+        cur.sum += h.risk_score_0_100;
+        cur.n += 1;
+        stats.set(p, cur);
+      }
+    }
+    const flagged = new Set<string>();
+    stats.forEach((v, p) => {
+      if (v.sum / v.n >= HIGH_RISK_PACKAGE_SCORE) flagged.add(p);
+    });
+    return flagged;
+  }, [historyChartData]);
+
+  const usageOption = {
+    color: ['#0072BC', '#6CB33F'],
+    tooltip: { trigger: 'axis', valueFormatter: (v: number) => `${v.toFixed(2)} GB` },
+    legend: { data: ['Download', 'Upload'] },
+    grid: { left: 60, right: 24, top: 40, bottom: 40 },
+    xAxis: { type: 'category', data: historyChartData.map((h) => h.session_date) },
+    yAxis: { type: 'value', name: 'GB' },
+    series: [
+      {
+        name: 'Download',
+        type: 'bar',
+        data: historyChartData.map((h) => Number((h.total_input_gb ?? 0).toFixed(2))),
+      },
+      {
+        name: 'Upload',
+        type: 'bar',
+        data: historyChartData.map((h) => Number((h.total_output_gb ?? 0).toFixed(2))),
+      },
+    ],
+  };
+
   const durationOption = {
     color: ['#6CB33F'],
-    tooltip: { trigger: 'axis' },
-    grid: { left: 70, right: 24, top: 30, bottom: 40 },
+    tooltip: {
+      trigger: 'axis',
+      formatter: (params: { axisValue: string; value: number }[]) =>
+        `${params[0].axisValue}<br/>Duration: <b>${formatHoursMinutes(params[0].value)}</b>`,
+    },
+    grid: { left: 80, right: 24, top: 30, bottom: 40 },
     xAxis: { type: 'category', data: historyChartData.map((h) => h.session_date) },
-    yAxis: { type: 'value', name: 'Minutes' },
+    yAxis: {
+      type: 'value',
+      name: 'Hours',
+      axisLabel: { formatter: (v: number) => `${Math.round(v / 60).toLocaleString()} h` },
+    },
     series: [
       {
         name: 'Duration (min)',
@@ -175,7 +257,7 @@ export function SubscribersPage() {
         />
         <Box sx={{ flexGrow: 1 }} />
         <Button startIcon={<DownloadIcon />} onClick={handleExportCsv} disabled={!data?.items.length}>
-          Export CSV
+          Download CSV
         </Button>
         <Button
           startIcon={<PictureAsPdfIcon />}
@@ -194,8 +276,8 @@ export function SubscribersPage() {
               <TableCell>Subscriber</TableCell>
               <TableCell>Account</TableCell>
               <TableCell>Date</TableCell>
-              <TableCell align="right">Risk</TableCell>
-              <TableCell align="right">Final score</TableCell>
+              <TableCell align="right">Risk prediction</TableCell>
+              <TableCell align="right">Risk score</TableCell>
               <TableCell>Decision</TableCell>
               <TableCell>Triggered rules</TableCell>
             </TableRow>
@@ -272,11 +354,26 @@ export function SubscribersPage() {
                 </Typography>
               </Box>
 
-              <Stack direction="row" spacing={1} alignItems="center">
-                <DecisionBadge decision={detail.latest_decision} />
-                <Typography variant="body2">
-                  Latest triggered rules: {detail.triggered_rules_latest.join(', ') || 'none'}
+              <Stack spacing={1}>
+                <Stack direction="row" spacing={1} alignItems="center">
+                  <DecisionBadge decision={detail.latest_decision} />
+                  <Typography variant="body2">
+                    Latest triggered rules: {detail.triggered_rules_latest.join(', ') || 'none'}
+                  </Typography>
+                </Stack>
+                <Typography variant="caption" color="text.secondary">
+                  Triggered rules are checks that flag usage well above what is typical for a day. The more rules a
+                  subscriber triggers, the higher the risk.
                 </Typography>
+                {detail.triggered_rules_latest.length > 0 && (
+                  <Box component="ul" sx={{ m: 0, pl: 2.5 }}>
+                    {detail.triggered_rules_latest.map((rule) => (
+                      <Typography component="li" variant="body2" key={rule}>
+                        <b>{rule}</b> – {RULE_DESCRIPTIONS[rule] ?? 'Usage flagged by a risk rule.'}
+                      </Typography>
+                    ))}
+                  </Box>
+                )}
               </Stack>
 
               <Grid container spacing={2}>
@@ -285,25 +382,17 @@ export function SubscribersPage() {
                   { label: 'Latest date', value: detail.latest_session_date },
                   { label: 'Maximum risk', value: `${detail.maximum_risk_score.toFixed(2)} / 100` },
                   { label: 'Average risk', value: detail.average_risk_score.toFixed(2) },
-                  {
-                    label: 'Score range',
-                    value: `${((detail.latest_final_score ?? detail.maximum_risk_score / 100) * 100).toFixed(2)} score`,
-                  },
-                  { label: 'Sessions / day', value: detail.sessions_per_day.toLocaleString() },
-                  { label: 'Daily usage', value: `${detail.daily_usage_gb.toFixed(2)} GB` },
-                  { label: 'Avg session usage', value: `${(detail.average_session_usage_gb ?? 0).toFixed(2)} GB` },
-                  {
-                    label: 'Avg session duration',
-                    value: `${(detail.average_session_duration_minutes ?? 0).toFixed(2)} min`,
-                  },
+                  { label: 'Total sessions', value: totalSessions.toLocaleString() },
+                  { label: 'Avg usage per session', value: `${(detail.average_session_usage_gb ?? 0).toFixed(2)} GB` },
+                  { label: 'Avg session count per day', value: avgSessionsPerDay.toLocaleString(undefined, { maximumFractionDigits: 1 }) },
                   { label: 'Download', value: `${(detail.total_input_gb ?? 0).toFixed(2)} GB` },
                   { label: 'Upload', value: `${(detail.total_output_gb ?? 0).toFixed(2)} GB` },
                   { label: 'Available history days', value: detail.history_days },
                   { label: 'Total source records', value: '—' },
-                  { label: 'Risk level', value: detail.risk_level },
+                  { label: 'Risk level', value: detail.risk_level, accent: RISK_LEVEL_COLORS[detail.risk_level] ?? RISK_LEVEL_COLORS.Normal },
                 ].map((tile) => (
                   <Grid item xs={6} sm={4} md={3} key={tile.label}>
-                    <KpiCard label={tile.label.toUpperCase()} value={tile.value} />
+                    <KpiCard label={tile.label.toUpperCase()} value={tile.value} accent={(tile as { accent?: string }).accent} />
                   </Grid>
                 ))}
               </Grid>
@@ -311,7 +400,16 @@ export function SubscribersPage() {
               <Card variant="outlined">
                 <CardContent>
                   <Typography variant="subtitle2" gutterBottom>
-                    Offer / packages by date
+                    Daily usage by day (download vs upload, GB)
+                  </Typography>
+                  <ReactECharts option={usageOption} style={{ height: 320 }} notMerge />
+                </CardContent>
+              </Card>
+
+              <Card variant="outlined">
+                <CardContent>
+                  <Typography variant="subtitle2" gutterBottom>
+                    Packages by date
                   </Typography>
                   <Stack spacing={1.5} sx={{ maxHeight: 360, overflowY: 'auto', pr: 1 }}>
                     {historyChartData.map((h) => (
@@ -325,7 +423,18 @@ export function SubscribersPage() {
                             .map((p) => p.trim())
                             .filter(Boolean)
                             .map((p) => (
-                              <Chip key={p} label={p} size="small" variant="outlined" color="primary" sx={{ height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 } }} />
+                              <Chip
+                                key={p}
+                                label={p}
+                                size="small"
+                                variant="outlined"
+                                color={highRiskPackages.has(p) ? 'error' : 'primary'}
+                                sx={{
+                                  height: 'auto',
+                                  '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 },
+                                  ...(highRiskPackages.has(p) && { borderWidth: 2, fontWeight: 600 }),
+                                }}
+                              />
                             ))}
                           {!h.offer_name && <Typography variant="body2" color="text.secondary">—</Typography>}
                         </Stack>
@@ -347,7 +456,7 @@ export function SubscribersPage() {
               <Card variant="outlined">
                 <CardContent>
                   <Typography variant="subtitle2" gutterBottom>
-                    Duration by day (minutes)
+                    Duration by day (hours & minutes)
                   </Typography>
                   <ReactECharts option={durationOption} style={{ height: 320 }} notMerge />
                 </CardContent>

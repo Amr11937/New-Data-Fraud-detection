@@ -1,7 +1,7 @@
 """
 Demask -- batch-convert masked subscriber IDs back to originals, via a
-parquet mapping lookup or a pluggable decryption provider. Files are
-uploaded and downloaded as parquet.
+parquet mapping lookup or a pluggable decryption provider. The input file
+is a CSV, the mapping file is parquet, and results download as CSV.
 
 Ported and merged from chinthakadd7/Demask (backend/routers/mapping.py +
 backend/routers/encryption.py), mounted under this app's existing CORS
@@ -27,19 +27,20 @@ _encryption_provider = EncryptionProvider()
 _RESULT_HEADERS_EXPOSE = "X-Total-Records, X-Processed, X-Unprocessed, X-Errors"
 
 
+def _read_csv(data: bytes) -> pd.DataFrame:
+    # Read as strings to preserve phone numbers and prevent dtype mismatch.
+    return pd.read_csv(io.BytesIO(data), dtype=str)
+
+
 def _read_parquet(data: bytes) -> pd.DataFrame:
-    # Everything is handled as strings (as the old CSV path did) so phone
-    # numbers keep their exact digits and ID columns never mismatch on dtype.
-    df = pd.read_parquet(io.BytesIO(data))
-    return df.astype("string")
+    # Handled as strings too, so ID columns never mismatch on dtype.
+    return pd.read_parquet(io.BytesIO(data)).astype("string")
 
 
-def _parquet_response(df: pd.DataFrame, filename: str, headers: dict) -> StreamingResponse:
-    buf = io.BytesIO()
-    df.to_parquet(buf, index=False)
-    buf.seek(0)
+def _csv_response(df: pd.DataFrame, filename: str, headers: dict) -> StreamingResponse:
+    csv_bytes = df.to_csv(index=False).encode("utf-8")
     headers = {**headers, "Content-Disposition": f'attachment; filename="{filename}"'}
-    return StreamingResponse(buf, media_type="application/octet-stream", headers=headers)
+    return StreamingResponse(iter([csv_bytes]), media_type="text/csv", headers=headers)
 
 
 @router.post("/mapping")
@@ -50,11 +51,11 @@ async def process_mapping(
     mapping_masked_col: str = Form("masked_subscriber_id"),
     mapping_original_col: str = Form("original_subscriber_id"),
 ):
-    # Parquet files, read as strings to preserve phone numbers and prevent dtype mismatch
+    # Input is a CSV and the mapping is parquet; both are read as strings
     try:
-        input_df = _read_parquet(await input_file.read())
+        input_df = _read_csv(await input_file.read())
     except Exception as exc:
-        raise HTTPException(400, f"Could not parse input parquet file: {exc}") from exc
+        raise HTTPException(400, f"Could not parse input CSV: {exc}") from exc
 
     try:
         mapping_df = _read_parquet(await mapping_file.read())
@@ -62,7 +63,7 @@ async def process_mapping(
         raise HTTPException(400, f"Could not parse mapping parquet file: {exc}") from exc
 
     if input_id_col not in input_df.columns:
-        raise HTTPException(422, f"Column '{input_id_col}' not found in input file. Available: {list(input_df.columns)}")
+        raise HTTPException(422, f"Column '{input_id_col}' not found in input CSV. Available: {list(input_df.columns)}")
     if mapping_masked_col not in mapping_df.columns:
         raise HTTPException(422, f"Column '{mapping_masked_col}' not found in mapping file. Available: {list(mapping_df.columns)}")
     if mapping_original_col not in mapping_df.columns:
@@ -86,7 +87,7 @@ async def process_mapping(
         "X-Errors": str(result.errors),
         "Access-Control-Expose-Headers": _RESULT_HEADERS_EXPOSE,
     }
-    return _parquet_response(result.dataframe, "updated_subscribers.parquet", headers)
+    return _csv_response(result.dataframe, "updated_subscribers.csv", headers)
 
 
 @router.get("/encryption/methods")
@@ -108,9 +109,9 @@ async def process_encryption(
     encryption_method: str = Form(...),
 ):
     try:
-        input_df = _read_parquet(await input_file.read())
+        input_df = _read_csv(await input_file.read())
     except Exception as exc:
-        raise HTTPException(400, f"Could not parse input parquet file: {exc}") from exc
+        raise HTTPException(400, f"Could not parse input CSV: {exc}") from exc
 
     if subscriber_id_col not in input_df.columns:
         raise HTTPException(422, f"Column '{subscriber_id_col}' not found. Available: {list(input_df.columns)}")
@@ -143,4 +144,4 @@ async def process_encryption(
         "X-Errors": str(result.errors),
         "Access-Control-Expose-Headers": _RESULT_HEADERS_EXPOSE,
     }
-    return _parquet_response(result.dataframe, "decrypted_subscribers.parquet", headers)
+    return _csv_response(result.dataframe, "decrypted_subscribers.csv", headers)

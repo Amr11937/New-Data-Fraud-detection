@@ -8,7 +8,6 @@ import MainLayout from '@/layouts/MainLayout';
 import { ExecutiveSummaryPage } from '@/pages/ExecutiveSummaryPage';
 import { SubscribersPage } from '@/pages/SubscribersPage';
 import { RiskAnalyticsPage } from '@/pages/RiskAnalyticsPage';
-import { SystemHealthPage } from '@/pages/SystemHealthPage';
 import { DemaskPage } from '@/pages/DemaskPage';
 import { LoginPage } from '@/pages/LoginPage';
 import { AuthProvider, RequireAuth } from '@/auth/AuthContext';
@@ -55,7 +54,6 @@ export default function App() {
                   <Route index element={<ExecutiveSummaryPage />} />
                   <Route path="subscribers" element={<SubscribersPage />} />
                   <Route path="risk" element={<RiskAnalyticsPage />} />
-                  <Route path="health" element={<SystemHealthPage />} />
                   <Route path="demask" element={<DemaskPage />} />
                 </Route>
                 <Route path="*" element={<Navigate to="/dashboard" replace />} />
