@@ -86,6 +86,12 @@ class SubscriberListResponse(BaseModel):
     total_pages: int
 
 
+class PackageRiskPoint(BaseModel):
+    package_name: str
+    risk_score_0_100: float
+    risk_level: Optional[str] = None
+
+
 class SubscriberDetailPoint(BaseModel):
     session_date: date
     total_input_gb: Optional[float]
@@ -93,6 +99,7 @@ class SubscriberDetailPoint(BaseModel):
     total_duration_minutes: Optional[float] = None
     sessions_per_day: Optional[int] = None
     offer_name: Optional[str] = None
+    package_risks: list[PackageRiskPoint] = []
     risk_score_0_100: float
     final_score: Optional[float]
     decision: Optional[str]
@@ -119,6 +126,32 @@ class SubscriberDetail(BaseModel):
     latest_decision: Optional[str]
     latest_final_score: Optional[float]
     triggered_rules_latest: list[str] = []
+
+
+# ---------- Package risk (per-package Isolation Forest scores) ----------
+
+class PackageRiskRow(BaseModel):
+    package_name: str
+    row_count: int
+    average_risk: float
+    max_risk: float
+    high_count: int
+    medium_count: int
+
+
+class PackageRiskDay(BaseModel):
+    date: date
+    row_count: int
+    average_risk: float
+    high_count: int
+    medium_count: int
+    low_count: int
+
+
+class PackageRiskResponse(BaseModel):
+    available: bool
+    packages: list[PackageRiskRow] = []
+    daily: list[PackageRiskDay] = []
 
 
 # ---------- Dashboard / KPIs ----------

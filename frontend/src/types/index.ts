@@ -142,6 +142,36 @@ export interface SubscriberListResponse {
   total_pages: number;
 }
 
+export interface PackageRiskPoint {
+  package_name: string;
+  risk_score_0_100: number;
+  risk_level: string | null;
+}
+
+export interface PackageRiskRow {
+  package_name: string;
+  row_count: number;
+  average_risk: number;
+  max_risk: number;
+  high_count: number;
+  medium_count: number;
+}
+
+export interface PackageRiskDay {
+  date: string;
+  row_count: number;
+  average_risk: number;
+  high_count: number;
+  medium_count: number;
+  low_count: number;
+}
+
+export interface PackageRiskResponse {
+  available: boolean;
+  packages: PackageRiskRow[];
+  daily: PackageRiskDay[];
+}
+
 export interface SubscriberDetailPoint {
   session_date: string;
   total_input_gb: number | null;
@@ -149,6 +179,7 @@ export interface SubscriberDetailPoint {
   total_duration_minutes?: number | null;
   sessions_per_day?: number | null;
   offer_name?: string | null;
+  package_risks?: PackageRiskPoint[];
   risk_score_0_100: number;
   final_score: number | null;
   decision: Decision | null;

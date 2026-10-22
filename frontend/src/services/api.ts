@@ -12,6 +12,7 @@ import type {
   CalendarDatesResponse,
   DailyPoint,
   KpiResponse,
+  PackageRiskResponse,
   PackageStatsResponse,
   RiskBand,
   RuleStatisticsResponse,
@@ -92,6 +93,16 @@ export const fetchRiskDistribution = async (): Promise<RiskBand[]> => {
 
 export const fetchPackageStats = async (): Promise<PackageStatsResponse> => {
   const { data } = await api.get('/api/analytics/packages');
+  return data;
+};
+
+export const fetchPackageRisk = async (
+  dateFrom?: string | null,
+  dateTo?: string | null
+): Promise<PackageRiskResponse> => {
+  const { data } = await api.get('/api/analytics/package-risk', {
+    params: buildParams({ date_from: dateFrom, date_to: dateTo, limit: 15 }),
+  });
   return data;
 };
 

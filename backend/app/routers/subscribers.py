@@ -7,6 +7,7 @@ from sqlalchemy import text
 
 from ..db import get_session
 from ..schemas import (
+    PackageRiskPoint,
     SubscriberDetail,
     SubscriberDetailPoint,
     SubscriberListResponse,
@@ -143,6 +144,31 @@ def get_subscriber_detail(subscriber_id: str) -> SubscriberDetail:
     latest = rows[-1]
     risk_scores = [r["risk_score_0_100"] for r in rows]
 
+    # Per-package risk (subscriber_package_daily) -- optional; older databases
+    # don't have the table yet, in which case history just has no package risks.
+    package_risks: dict = {}
+    try:
+        with get_session() as session:
+            pkg_rows = session.execute(
+                text("""
+                    SELECT session_date, package_name, risk_score_0_100, risk_level
+                    FROM subscriber_package_daily
+                    WHERE subscriber_id = :subscriber_id
+                    ORDER BY risk_score_0_100 DESC
+                """),
+                {"subscriber_id": subscriber_id},
+            ).mappings().all()
+        for p in pkg_rows:
+            package_risks.setdefault(p["session_date"], []).append(
+                PackageRiskPoint(
+                    package_name=p["package_name"],
+                    risk_score_0_100=p["risk_score_0_100"],
+                    risk_level=p["risk_level"],
+                )
+            )
+    except Exception:
+        package_risks = {}
+
     return SubscriberDetail(
         subscriber_id=subscriber_id,
         account_num=latest["account_num"],
@@ -170,6 +196,7 @@ def get_subscriber_detail(subscriber_id: str) -> SubscriberDetail:
                 total_duration_minutes=r["total_duration_minutes"],
                 sessions_per_day=r["sessions_per_day"],
                 offer_name=r["offer_name"],
+                package_risks=package_risks.get(r["session_date"], []),
                 risk_score_0_100=r["risk_score_0_100"],
                 final_score=r["final_score"],
                 decision=r["decision"],

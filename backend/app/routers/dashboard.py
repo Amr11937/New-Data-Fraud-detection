@@ -12,6 +12,9 @@ from ..schemas import (
     CalendarDatesResponse,
     DailyPoint,
     KpiResponse,
+    PackageRiskDay,
+    PackageRiskResponse,
+    PackageRiskRow,
     PackageStat,
     PackageStatsResponse,
     RiskBand,
@@ -323,6 +326,69 @@ def get_package_stats() -> PackageStatsResponse:
         for r in usage_rows
     ]
     return PackageStatsResponse(distribution=distribution, usage=usage, usage_is_approximate=True)
+
+
+@router.get("/analytics/package-risk", response_model=PackageRiskResponse)
+def get_package_risk(
+    date_from: Optional[date_type] = Query(None),
+    date_to: Optional[date_type] = Query(None),
+    limit: int = Query(20, ge=1, le=100),
+    min_rows: int = Query(50, ge=1, description="Ignore packages with fewer subscriber-days than this"),
+) -> PackageRiskResponse:
+    # Reads the small per-(date, package) rollup built by scripts/load_package_risk.py.
+    params = {"date_from": date_from, "date_to": date_to, "limit": limit, "min_rows": min_rows}
+    pkg_sql = text(f"""
+        SELECT package_name, SUM(row_count) AS row_count,
+               SUM(risk_sum) / NULLIF(SUM(row_count), 0) AS average_risk,
+               MAX(risk_max) AS max_risk, SUM(high_count) AS high_count, SUM(medium_count) AS medium_count
+        FROM package_risk_daily
+        WHERE {_DATE_RANGE_SQL}
+        GROUP BY package_name
+        HAVING SUM(row_count) >= :min_rows
+        ORDER BY average_risk DESC
+        LIMIT :limit
+    """)
+    day_sql = text(f"""
+        SELECT session_date AS date, SUM(row_count) AS row_count,
+               SUM(risk_sum) / NULLIF(SUM(row_count), 0) AS average_risk,
+               SUM(high_count) AS high_count, SUM(medium_count) AS medium_count, SUM(low_count) AS low_count
+        FROM package_risk_daily
+        WHERE {_DATE_RANGE_SQL}
+        GROUP BY session_date
+        ORDER BY session_date ASC
+    """)
+    try:
+        with get_session() as session:
+            pkg_rows = session.execute(pkg_sql, params).mappings().all()
+            day_rows = session.execute(day_sql, params).mappings().all()
+    except Exception:
+        return PackageRiskResponse(available=False)
+
+    return PackageRiskResponse(
+        available=bool(day_rows),
+        packages=[
+            PackageRiskRow(
+                package_name=r["package_name"],
+                row_count=int(r["row_count"]),
+                average_risk=round(float(r["average_risk"] or 0), 2),
+                max_risk=round(float(r["max_risk"] or 0), 2),
+                high_count=int(r["high_count"] or 0),
+                medium_count=int(r["medium_count"] or 0),
+            )
+            for r in pkg_rows
+        ],
+        daily=[
+            PackageRiskDay(
+                date=r["date"],
+                row_count=int(r["row_count"]),
+                average_risk=round(float(r["average_risk"] or 0), 2),
+                high_count=int(r["high_count"] or 0),
+                medium_count=int(r["medium_count"] or 0),
+                low_count=int(r["low_count"] or 0),
+            )
+            for r in day_rows
+        ],
+    )
 
 
 @router.get("/analytics/rule-statistics", response_model=RuleStatisticsResponse)

@@ -37,6 +37,13 @@ export function usePackageStats() {
   });
 }
 
+export function usePackageRisk(range: DateRange) {
+  return useQuery({
+    queryKey: ['package-risk', range.dateFrom, range.dateTo],
+    queryFn: () => api.fetchPackageRisk(range.dateFrom, range.dateTo),
+  });
+}
+
 export function useRuleStatistics(range: DateRange) {
   return useQuery({
     queryKey: ['rule-statistics', range.dateFrom, range.dateTo],

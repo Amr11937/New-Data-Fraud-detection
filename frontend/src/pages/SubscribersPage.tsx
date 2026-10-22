@@ -24,6 +24,7 @@ import {
   TableRow,
   TextField,
   Toolbar,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import type { TransitionProps } from '@mui/material/transitions';
@@ -64,8 +65,8 @@ const RISK_LEVEL_COLORS: Record<string, string> = {
   Normal: '#4F9F2F',
 };
 
-// A package counts as high-risk for a subscriber when the subscriber's average risk score
-// on the days that package was active is in the High band (70+) or above.
+// Fallback when a date has no per-package risk: a package counts as high-risk when the
+// subscriber's average risk score on the days it was active is in the High band (70+).
 const HIGH_RISK_PACKAGE_SCORE = 70;
 
 function formatHoursMinutes(totalMinutes: number): string {
@@ -129,7 +130,21 @@ export function SubscribersPage() {
   );
   const avgSessionsPerDay = historyChartData.length ? totalSessions / historyChartData.length : 0;
 
-  const highRiskPackages = useMemo(() => {
+  // Red package tags: use the real per-package risk when we have it for that date;
+  // otherwise fall back to the subscriber's average risk on the days the package was active.
+  const packageRiskByDate = useMemo(() => {
+    const m = new Map<string, Map<string, { score: number; level: string | null }>>();
+    for (const h of historyChartData) {
+      if (!h.package_risks?.length) continue;
+      m.set(
+        h.session_date,
+        new Map(h.package_risks.map((p) => [p.package_name, { score: p.risk_score_0_100, level: p.risk_level }]))
+      );
+    }
+    return m;
+  }, [historyChartData]);
+
+  const fallbackHighRiskPackages = useMemo(() => {
     const stats = new Map<string, { sum: number; n: number }>();
     for (const h of historyChartData) {
       for (const p of (h.offer_name ?? '').split(',').map((x) => x.trim()).filter(Boolean)) {
@@ -422,20 +437,25 @@ export function SubscribersPage() {
                             .split(',')
                             .map((p) => p.trim())
                             .filter(Boolean)
-                            .map((p) => (
-                              <Chip
-                                key={p}
-                                label={p}
-                                size="small"
-                                variant="outlined"
-                                color={highRiskPackages.has(p) ? 'error' : 'primary'}
-                                sx={{
-                                  height: 'auto',
-                                  '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 },
-                                  ...(highRiskPackages.has(p) && { borderWidth: 2, fontWeight: 600 }),
-                                }}
-                              />
-                            ))}
+                            .map((p) => {
+                              const real = packageRiskByDate.get(h.session_date)?.get(p);
+                              const isHigh = real ? real.level === 'HIGH' : fallbackHighRiskPackages.has(p);
+                              return (
+                                <Tooltip key={p} title={real ? `Package risk ${real.score.toFixed(1)} (${real.level ?? 'n/a'})` : ''}>
+                                  <Chip
+                                    label={real ? `${p} · ${real.score.toFixed(0)}` : p}
+                                    size="small"
+                                    variant="outlined"
+                                    color={isHigh ? 'error' : 'primary'}
+                                    sx={{
+                                      height: 'auto',
+                                      '& .MuiChip-label': { whiteSpace: 'normal', py: 0.5 },
+                                      ...(isHigh && { borderWidth: 2, fontWeight: 600 }),
+                                    }}
+                                  />
+                                </Tooltip>
+                              );
+                            })}
                           {!h.offer_name && <Typography variant="body2" color="text.secondary">—</Typography>}
                         </Stack>
                       </Stack>
