@@ -8,6 +8,7 @@ from sqlalchemy import text
 from ..db import get_session
 from ..schemas import (
     PackageRiskPoint,
+    PackageUsagePoint,
     SubscriberDetail,
     SubscriberDetailPoint,
     SubscriberListResponse,
@@ -147,6 +148,7 @@ def get_subscriber_detail(subscriber_id: str) -> SubscriberDetail:
     # Per-package risk (subscriber_package_daily) -- optional; older databases
     # don't have the table yet, in which case history just has no package risks.
     package_risks: dict = {}
+    package_usage: list[PackageUsagePoint] = []
     try:
         with get_session() as session:
             pkg_rows = session.execute(
@@ -166,8 +168,41 @@ def get_subscriber_detail(subscriber_id: str) -> SubscriberDetail:
                     risk_level=p["risk_level"],
                 )
             )
+        # Per-package usage for the Package-wise Usage Analysis section. Grouped because
+        # the source can repeat a (date, package) pair.
+        with get_session() as session:
+            usage_rows = session.execute(
+                text("""
+                    SELECT session_date, package_name,
+                           SUM(sessions_per_day) AS sessions_per_day,
+                           SUM(download_gb) AS download_gb,
+                           SUM(upload_gb) AS upload_gb,
+                           SUM(total_usage_gb) AS total_usage_gb,
+                           MAX(risk_score_0_100) AS risk_score_0_100,
+                           (ARRAY_AGG(risk_level ORDER BY risk_score_0_100 DESC))[1] AS risk_level
+                    FROM subscriber_package_daily
+                    WHERE subscriber_id = :subscriber_id
+                    GROUP BY session_date, package_name
+                    ORDER BY session_date, package_name
+                """),
+                {"subscriber_id": subscriber_id},
+            ).mappings().all()
+        package_usage = [
+            PackageUsagePoint(
+                session_date=u["session_date"],
+                package_name=u["package_name"],
+                sessions_per_day=int(u["sessions_per_day"]) if u["sessions_per_day"] is not None else None,
+                download_gb=float(u["download_gb"] or 0),
+                upload_gb=float(u["upload_gb"] or 0),
+                total_usage_gb=float(u["total_usage_gb"] or 0),
+                risk_score_0_100=u["risk_score_0_100"],
+                risk_level=u["risk_level"],
+            )
+            for u in usage_rows
+        ]
     except Exception:
         package_risks = {}
+        package_usage = []
 
     return SubscriberDetail(
         subscriber_id=subscriber_id,
@@ -188,6 +223,7 @@ def get_subscriber_detail(subscriber_id: str) -> SubscriberDetail:
         latest_decision=latest["decision"],
         latest_final_score=latest["final_score"],
         triggered_rules_latest=_split_rules(latest["triggered_rules"]),
+        package_usage=package_usage,
         history=[
             SubscriberDetailPoint(
                 session_date=r["session_date"],

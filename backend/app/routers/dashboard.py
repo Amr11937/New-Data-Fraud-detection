@@ -169,8 +169,28 @@ def get_calendar_dates() -> CalendarDatesResponse:
     with get_session() as session:
         rows = session.execute(sql).mappings().all()
 
-    dates = [CalendarDateInfo(date=r["date"], record_count=int(r["record_count"])) for r in rows]
-    return CalendarDatesResponse(dates=dates, total_records=sum(d.record_count for d in dates))
+    counts = {r["date"]: int(r["record_count"]) for r in rows}
+
+    # Dates covered by the per-package dataset (small rollup table), which can
+    # include days the subscriber dataset does not. Optional: older databases
+    # don't have the table.
+    package_counts: dict = {}
+    try:
+        with get_session() as session:
+            pkg_rows = session.execute(text("""
+                SELECT session_date AS date, SUM(row_count) AS record_count
+                FROM package_risk_daily
+                GROUP BY session_date
+            """)).mappings().all()
+        package_counts = {r["date"]: int(r["record_count"]) for r in pkg_rows}
+    except Exception:
+        package_counts = {}
+
+    dates = [
+        CalendarDateInfo(date=d, record_count=counts.get(d, 0), package_record_count=package_counts.get(d, 0))
+        for d in sorted(set(counts) | set(package_counts))
+    ]
+    return CalendarDatesResponse(dates=dates, total_records=sum(counts.values()))
 
 
 def _window_summary(session, label: str, date_from: date_type, date_to: date_type) -> WindowSummary:
